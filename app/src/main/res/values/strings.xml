@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">RoutePlanner</string>
+    <string name="RouteMainTitle"> <u>Main Title</u> </string>
+    <string name="RouteDistance"> Distance:  </string>
+    <string name="TimesRun"> Number of times Run: </string>
+    <string name="AverageSpeed"> Average speed: </string>
     <string name="button_run_route_text">Run a route</string>
     <string name="button_create_route_text">Create a new route</string>
     <string name="button_route_overview_text">See your routes</string>
