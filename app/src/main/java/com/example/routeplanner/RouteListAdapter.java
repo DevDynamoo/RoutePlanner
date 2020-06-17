@@ -31,7 +31,10 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
         RouteListItem item = new RouteListItem(name, distance, completions, avgSpeed);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent, false);
+
+        if (convertView == null) {
+            convertView = inflater.inflate(mResource, parent, false);
+        }
 
         TextView tvTitle = (TextView) convertView.findViewById(R.id.RouteMainTitle);
         TextView tvDistance = (TextView) convertView.findViewById(R.id.RouteDistance);
