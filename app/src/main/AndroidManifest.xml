@@ -23,6 +23,8 @@
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/AIzaSyDc5duXkkmX4SyGUW6WNEY7DX06WhUEJFE" />
+
+
         <activity android:name=".PersonalStatisticsActivity"/>
         <activity android:name=".RunRouteActivity" />
         <activity android:name=".RouteOverviewActivity" />
