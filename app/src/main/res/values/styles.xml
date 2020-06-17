@@ -2,9 +2,16 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#FA4626</item>
+        <item name="colorPrimaryDark">#BD1600</item>
+        <item name="colorAccent">#F1EE4A</item>'
+        <item name="android:colorBackground">#FFCCB4</item>
+    </style>
+    <style name="GreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">#50CF55</item>
+        <item name="colorPrimaryDark">#00965A</item>
+        <item name="colorAccent">#9F69FF</item>
+        <item name="android:colorBackground">#D7FFB4</item>
     </style>
 
 </resources>
