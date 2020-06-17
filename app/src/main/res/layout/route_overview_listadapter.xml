@@ -27,14 +27,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/RouteDistance"
             android:text="@string/RouteDistance"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/RouteCompletions"
             android:text="@string/TimesRun"/>
+
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/RouteAvgSpeed"
             android:text="@string/AverageSpeed"/>
 
     </LinearLayout>

@@ -5,6 +5,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
+
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 
 public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
@@ -27,7 +31,18 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
         RouteListItem item = new RouteListItem(name, distance, completions, avgSpeed);
 
         LayoutInflater inflater = LayoutInflater.from(mContext);
-        convertView = inflater.inflate(mResource, parent);
+        convertView = inflater.inflate(mResource, parent, false);
 
+        TextView tvTitle = (TextView) convertView.findViewById(R.id.RouteMainTitle);
+        TextView tvDistance = (TextView) convertView.findViewById(R.id.RouteDistance);
+        TextView tvCompletions = (TextView) convertView.findViewById(R.id.RouteCompletions);
+        TextView tvAvgSpeed = (TextView) convertView.findViewById(R.id.RouteAvgSpeed);
+
+        tvTitle.setText(name);
+        tvDistance.setText("Distance: " + distance);
+        tvCompletions.setText("Number of times run: " + completions);
+        tvAvgSpeed.setText("Average speed: " + avgSpeed);
+
+        return convertView;
     }
 }
