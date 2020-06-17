@@ -31,7 +31,7 @@
 
         <activity android:name=".RunRouteActivity" />
         <activity android:name=".RouteOverviewActivity" />
-        <activity android:name=".PrepareRunActivty" />
+        <activity android:name=".PrepareRunActivity" />
         <activity android:name=".CreateRouteActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
