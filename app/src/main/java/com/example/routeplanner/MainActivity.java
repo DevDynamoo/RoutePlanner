@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         prepareRunActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent startPrepareRouteIntent = new Intent(MainActivity.this, PrepareRunActivty.class);
+                Intent startPrepareRouteIntent = new Intent(MainActivity.this, PrepareRunActivity.class);
                 startActivity(startPrepareRouteIntent);
             }
         });
