@@ -38,5 +38,13 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startRouteOverviewIntent);
             }
         });
+        Button personalStatisticsActivityButton = (Button) findViewById(R.id.button_personal_statistics);
+        personalStatisticsActivityButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startPersonalStatisticsIntent = new Intent(MainActivity.this, PersonalStatisticsActivity.class);
+                startActivity(startPersonalStatisticsIntent);
+            }
+        });
     }
 }
