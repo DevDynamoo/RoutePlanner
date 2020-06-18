@@ -1,16 +1,24 @@
 package com.example.routeplanner;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 @Entity
 public class RouteListItem {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     private int id;
 
+    @ColumnInfo(name = "route_name")
     private String name;
+
+    @ColumnInfo(name = "route_distance")
     private String distance;
+
+    @ColumnInfo(name = "route_completions")
     private String completions;
+
+    @ColumnInfo(name = "route_avgSpeed")
     private String avgSpeed;
 
     public RouteListItem(String name, String distance, String completions, String avgSpeed) {
