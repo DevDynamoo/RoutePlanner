@@ -29,7 +29,6 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
         String avgSpeed = getItem(position).getAvgSpeed();
 
         RouteListItem item = new RouteListItem(name, distance, completions, avgSpeed);
-
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         if (convertView == null) {
