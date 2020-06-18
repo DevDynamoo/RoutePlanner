@@ -8,4 +8,6 @@
     <string name="button_create_route_text">Create a new route</string>
     <string name="button_route_overview_text">See your routes</string>
     <string name="button_personal_statistics_text">Personal Statistics</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="google_maps_key">AIzaSyDvEnjyFXXOywEWQtggkoeGq8wQZwYAFYs</string>
 </resources>
