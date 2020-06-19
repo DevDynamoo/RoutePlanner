@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,98 +21,80 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
-import static com.example.routeplanner.RunRouteActivity.MyData;
-import static com.example.routeplanner.RunRouteActivity.time;
+
 
 public class PersonalStatisticsActivity extends AppCompatActivity {
 
     public static ArrayList<StatisticsData> statisticsDataItems = new ArrayList<>();
 
-    //DatabaseReference ref;
-    //StatisticsData member;
+    DatabaseReference rootRef;
+    String ID;
 
+    TextView Display_distance;
+    TextView Display_time;
+    TextView Display_avrspeed;
 
-
+    public int totalTime;
+    public double AvrSpeed;
+    public double totalDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_statistics);
 
+        //Get reference
+        rootRef= FirebaseDatabase.getInstance().getReference().child("PersonalStats");
+        ID="-MAD-Y5CEBd4OA0yp7g4";
         //Setting textview
-        TextView Display_distance = findViewById(R.id.displaydistance);
-        TextView Display_time = findViewById(R.id.displaytime);
-        TextView Display_avrspeed =findViewById(R.id.displayspeed);
+        Display_distance = findViewById(R.id.displaydistance);
+        Display_time = findViewById(R.id.displaytime);
+        Display_avrspeed =findViewById(R.id.displayspeed);
 
-        //Calculating statistics
-        double caldistance = CalTotalDistance(statisticsDataItems);
-        double caltime = CalTotalTime(statisticsDataItems);
-        double calspeed = CalOverallAvrSpeed(statisticsDataItems);
+        //Getting lastest stats
+        rootRef.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                     //Getting info to stats
+                     totalTime=dataSnapshot.getValue(PersonalStats.class).getTime();
+                     AvrSpeed=Calspeed(dataSnapshot.getValue(PersonalStats.class).getNum(),dataSnapshot.getValue(PersonalStats.class).getTotalspeed());
+                     totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
+
+                     //Calculating statistics
 
 
-        //Viewing staticstics
-        Display_time.setText("Total Time: "+caltime);
-        Display_distance.setText("Total distance: "+caldistance);
-        Display_avrspeed.setText("Overall Average speed:"+calspeed);
+                     //Viewing staticstics
+                     Display_time.setText("Total Time: "+totalTime);
+                     Display_distance.setText("Total distance: "+totalDistance);
+                     Display_avrspeed.setText("Overall Average speed:"+AvrSpeed);
+                 }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                 }
+             });
+
+
 
 
     }
 
-    private void loadData() {
-        SharedPreferences sharedPreferences = getSharedPreferences(MyData, Context.MODE_PRIVATE);
-        int de=sharedPreferences.getInt("time",0);
+
+    private double Calspeed(int num, double total )  {
+
+            return (total / (double) num );
+
     }
 
-    private double CalOverallAvrSpeed(ArrayList<StatisticsData> statisticsDataArrayList)  {
-        double temp = 0.0;
-        if(!statisticsDataArrayList.isEmpty()) {
-            for (StatisticsData elm : statisticsDataArrayList) {
-                temp += elm.avrSpeed;
-            }
-            return (temp / statisticsDataArrayList.size());
-        }
-        return temp;
-    }
-    private int CalTotalTime(ArrayList<StatisticsData> statisticsDataArrayList)  {
-        int temp = 0;
-        if(!statisticsDataArrayList.isEmpty()) {
-            for (StatisticsData elm : statisticsDataArrayList) {
-                temp += elm.time;
-            }
-            return (temp / statisticsDataArrayList.size());
-        }
-        return temp;
-    }
-    private double CalTotalDistance(ArrayList<StatisticsData> statisticsDataArrayList)  {
-        double temp = 0.0;
-        if(!statisticsDataArrayList.isEmpty()) {
-            for (StatisticsData elm : statisticsDataArrayList) {
-                temp += elm.distance;
-            }
-            return (temp / statisticsDataArrayList.size());
-        }
-        return temp;
-    }
+
 }
 
 
-/*
-        //Get reference
-        ref= FirebaseDatabase.getInstance().getReference().child("StatisticsData");
-        Toast.makeText(PersonalStatisticsActivity.this,"Firebase Connection success",
-                Toast.LENGTH_LONG).show();
 
-        //Create member
-        member= new StatisticsData();
-        member.setAvrSpeed(12.00);
-        member.setDistance(51.50);
-        member.setTime(14);
-
-        //Add member
-        ref.push().setValue(member);
-        Toast.makeText(PersonalStatisticsActivity.this,"Data Added",Toast.LENGTH_LONG).show();
-*/
 
 //Delete
 // deleteItem("");

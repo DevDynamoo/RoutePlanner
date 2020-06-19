@@ -33,7 +33,6 @@
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps"></activity>
         <activity android:name=".PersonalStatisticsActivity" />
-        <activity android:name=".RunRouteActivity" />
         <activity android:name=".RouteOverviewActivity" />
         <activity android:name=".PrepareRunActivity" />
         <activity android:name=".CreateRouteActivity" />
