@@ -12,7 +12,7 @@ import java.util.ArrayList;
 public class RouteOverviewActivity extends AppCompatActivity {
 
     private static final String TAG = "RouteOverview";
-    private ArrayList<RouteListItem> routeListItems = new ArrayList<>();
+    private static ArrayList<RouteListItem> routeListItems = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +38,10 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
     public void removeRoute(int position) {
         routeListItems.remove(position);
+    }
+
+    public static ArrayList<RouteListItem> getRouteListItems() {
+        return routeListItems;
     }
 }
 

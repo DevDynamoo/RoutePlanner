@@ -8,7 +8,7 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button_run_route"
+        android:id="@+id/button_goto_run_route"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
@@ -16,7 +16,7 @@
         android:layout_marginEnd="80dp"
         android:backgroundTint="#59F37617"
         android:lineSpacingExtra="8sp"
-        android:text="@string/button_run_route_text"
+        android:text="@string/button_goto_run_route_text"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -24,45 +24,46 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_create_route"
+        android:id="@+id/button_goto_create_route"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="80dp"
         android:backgroundTint="#59F37617"
-        android:text="@string/button_create_route_text"
+        android:text="@string/button_goto_create_route_text"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_run_route" />
+        app:layout_constraintTop_toBottomOf="@+id/button_goto_run_route" />
 
     <Button
-        android:id="@+id/button_route_overview"
+        android:id="@+id/button_goto_route_overview"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="80dp"
         android:backgroundTint="#59F37617"
-        android:text="@string/button_route_overview_text"
+        android:text="@string/button_goto_route_overview_text"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_create_route" />
+        app:layout_constraintTop_toBottomOf="@+id/button_goto_create_route" />
 
     <Button
-        android:id="@+id/button_personal_statistics"
+        android:id="@+id/button_goto_personal_statistics"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="80dp"
         android:layout_marginTop="48dp"
         android:layout_marginEnd="80dp"
-        android:text="@string/button_personal_statistics_text"
+        android:text="@string/button_goto_personal_statistics_text"
         android:textSize="21sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_route_overview" />
+        app:layout_constraintTop_toBottomOf="@+id/button_goto_route_overview" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

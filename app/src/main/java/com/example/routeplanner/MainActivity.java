@@ -14,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button prepareRunActivityButton = (Button) findViewById(R.id.button_run_route);
+        Button prepareRunActivityButton = (Button) findViewById(R.id.button_goto_run_route);
         prepareRunActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startPrepareRouteIntent);
             }
         });
-        Button createRouteActivityButton = (Button) findViewById(R.id.button_create_route);
+        Button createRouteActivityButton = (Button) findViewById(R.id.button_goto_create_route);
         createRouteActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startCreateRouteIntent);
             }
         });
-        Button routeOverviewActivityButton = (Button) findViewById(R.id.button_route_overview);
+        Button routeOverviewActivityButton = (Button) findViewById(R.id.button_goto_route_overview);
         routeOverviewActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(startRouteOverviewIntent);
             }
         });
-        Button personalStatisticsActivityButton = (Button) findViewById(R.id.button_personal_statistics);
+        Button personalStatisticsActivityButton = (Button) findViewById(R.id.button_goto_personal_statistics);
         personalStatisticsActivityButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

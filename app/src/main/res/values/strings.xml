@@ -4,10 +4,14 @@
     <string name="RouteDistance"> Distance:  </string>
     <string name="TimesRun"> Number of times Run: </string>
     <string name="AverageSpeed"> Average speed: </string>
-    <string name="button_run_route_text">Run a route</string>
-    <string name="button_create_route_text">Create a new route</string>
-    <string name="button_route_overview_text">See your routes</string>
-    <string name="button_personal_statistics_text">Personal Statistics</string>
+    <string name="button_goto_run_route_text">Run a route</string>
+    <string name="button_goto_create_route_text">Create a new route</string>
+    <string name="button_goto_route_overview_text">See your routes</string>
+    <string name="button_goto_personal_statistics_text">Personal Statistics</string>
+    <string name="button_create_route_text">Create route</string>
+    <string name="route_length">Length of route:</string>
+    <string name="name_your_route">Name your route:</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyDvEnjyFXXOywEWQtggkoeGq8wQZwYAFYs</string>
+
 </resources>
