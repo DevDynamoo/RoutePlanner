@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -25,10 +26,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.model.PlaceLikelihood;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest;
-import com.google.android.libraries.places.api.net.FindCurrentPlaceResponse;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 public class CreateRouteActivity extends FragmentActivity
@@ -60,20 +57,24 @@ public class CreateRouteActivity extends FragmentActivity
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null) {
+            lastKnownLocation = savedInstanceState.getParcelable(KEY_LOCATION);
+            cameraPosition = savedInstanceState.getParcelable(KEY_CAMERA_POSITION);
+        }
+
         setContentView(R.layout.activity_create_route);
-
-        // Construct a GeoDataClient.
-        mGeoDataClient = Places.getGeoDataClient(this, null);
-
-        // Construct a PlaceDetectionClient.
-        mPlaceDetectionClient = Places.getPlaceDetectionClient(this, null);
 
         // Construct a FusedLocationProviderClient.
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        // Construct a PlacesClient
+        Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
+        mPlacesClient = Places.createClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -95,7 +96,7 @@ public class CreateRouteActivity extends FragmentActivity
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
-
+    @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
@@ -119,6 +120,10 @@ public class CreateRouteActivity extends FragmentActivity
                 .position(dtu)
                 .title("DTU Markør"));
 
+        this.map = googleMap;
+
+        getLocationPermission();
+
         // Turn on the My Location layer and the related control on the map.
         updateLocationUI();
 
@@ -132,7 +137,7 @@ public class CreateRouteActivity extends FragmentActivity
          */
         try {
             if (locationPermissionGranted) {
-                Task<Location> locationResult = fusedLocationProviderClient.getLastLocation();
+                Task<Location> locationResult =  mFusedLocationProviderClient.getLastLocation();
                 locationResult.addOnCompleteListener(this, new OnCompleteListener<Location>() {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
@@ -158,6 +163,8 @@ public class CreateRouteActivity extends FragmentActivity
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
+
+
     private void updateLocationUI() {
         if (map == null) {
             return;
