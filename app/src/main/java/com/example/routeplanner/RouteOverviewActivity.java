@@ -22,7 +22,6 @@ public class RouteOverviewActivity extends AppCompatActivity {
         Log.i(TAG, "onCreate called");
 
         ListView listView = (ListView) findViewById(R.id.listView);
-
         // Example routes to be deleted later
         addRoute("My route", "10 km", "2", "5 km/h");
         addRoute("Marathon", "42 km", "0", "5 km/h");
