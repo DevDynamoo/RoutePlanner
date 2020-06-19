@@ -31,9 +31,9 @@ public class MapsFragment extends Fragment {
          */
         @Override
         public void onMapReady(GoogleMap googleMap) {
-            LatLng sydney = new LatLng(-34, 151);
-            googleMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-            googleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            LatLng dtu = new LatLng(55.7858105, 12.5195605);
+            googleMap.addMarker(new MarkerOptions().position(dtu).title("DTU Markør"));
+            googleMap.moveCamera(CameraUpdateFactory.newLatLng(dtu));
         }
     };
 
