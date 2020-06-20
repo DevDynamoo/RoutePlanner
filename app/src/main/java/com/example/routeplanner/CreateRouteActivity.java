@@ -12,6 +12,9 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,6 +50,7 @@ public class CreateRouteActivity extends FragmentActivity
     private CameraPosition cameraPosition;
     private Stack<Marker> markerStack = new Stack<Marker>();
     private Stack<Polyline> polylineStack = new Stack<Polyline>();
+    private CheckBox cycleCheckBox;
 
     private ArrayList<Float> routeLength;
 
@@ -84,6 +88,21 @@ public class CreateRouteActivity extends FragmentActivity
 
         setContentView(R.layout.activity_create_route);
 
+        cycleCheckBox = findViewById(R.id.checkBox);
+        cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isChecked() && markerStack.size() > 1) {
+                    float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
+                    routeLength.add(cycleDist);
+                    updateCalcLengthText();
+                } else if (markerStack.size() > 1) {
+                    routeLength.remove(routeLength.size()-1);
+                    updateCalcLengthText();
+                }
+            }
+        });
+
         routeLength = new ArrayList<>();
 
         // Construct a FusedLocationProviderClient
@@ -105,7 +124,6 @@ public class CreateRouteActivity extends FragmentActivity
         initializeListeners();
 
         map.setOnMarkerClickListener(this);
-
         getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
@@ -149,7 +167,17 @@ public class CreateRouteActivity extends FragmentActivity
                 Log.d(TAG, "Size of stack: " + markerStack.size());
                 if (markerStack.size() >= 1) {
                     float result = getDistanceBetweenMarkers(newMarker, markerStack.peek());
-                    routeLength.add(result);
+
+                    // If checkbox is checked, replace final cycle length
+                    // with new final cycle length
+                    if (cycleCheckBox.isChecked()) {
+                        routeLength.remove(routeLength.size()-1);
+                        routeLength.add(result);
+                        float newDist = getDistanceBetweenMarkers(markerStack.get(0), newMarker);
+                        routeLength.add(newDist);
+                    } else {
+                        routeLength.add(result);
+                    }
                     updateCalcLengthText();
                 }
                 markerStack.push(newMarker);
@@ -310,8 +338,9 @@ public class CreateRouteActivity extends FragmentActivity
         for (int i = 0; i < routeLength.size(); i++) {
             totalRouteLength += routeLength.get(i);
         }
+
         //TODO add cyclic route check here
-//        if (routeLength.size() >= 2) {
+//        if (routeLength.size() >= 2 && cycleCheckBox.isChecked()) {
 //            totalRouteLength += getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
 //        }
 
