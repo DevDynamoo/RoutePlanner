@@ -69,7 +69,7 @@ public class CreateRouteActivity extends FragmentActivity
 
         setContentView(R.layout.activity_create_route);
 
-        // Construct a FusedLocationProviderClient.
+        // Construct a FusedLocationProviderClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         // Construct a PlacesClient

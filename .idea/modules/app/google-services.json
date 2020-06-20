@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "221882996573",
+    "firebase_url": "https://routeplanner-2f974.firebaseio.com",
+    "project_id": "routeplanner-2f974",
+    "storage_bucket": "routeplanner-2f974.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221882996573:android:f59d5e61efdc99e27ebab4",
+        "android_client_info": {
+          "package_name": "com.example.routeplanner"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221882996573-3n0vu28jkqcao1g47iermul1ktamo89a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.routeplanner",
+            "certificate_hash": "1e6fe9bf95ad24e05547754042d1c59b8eaa11d3"
+          }
+        },
+        {
+          "client_id": "221882996573-if3pt37gbe81ruv80cjbm167n0c6vq6a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhmbq3ZumuyRut8EvcMQkCBFAhdy5-BJc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221882996573-if3pt37gbe81ruv80cjbm167n0c6vq6a.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
