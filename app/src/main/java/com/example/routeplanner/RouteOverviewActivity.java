@@ -36,12 +36,27 @@ public class RouteOverviewActivity extends AppCompatActivity {
        // DatabaseReference ref = appDatabase.getReference("Routes");
        // ref.setValue(example1, example2);
 
-        addRoute(example1.getName(), example1.getDistance(), example1.getCompletions(), example1.getAvgSpeed());
-        addRoute(example2.getName(), example2.getDistance(), example2.getCompletions(), example2.getAvgSpeed());
+        // Example routes created in onCreate method
+        // Should be added in another way through user interaction
+        if (!containsRouteWithName(example1.getName())) {
+            addRoute(example1.getName(), example1.getDistance(), example1.getCompletions(), example1.getAvgSpeed());
+        }
+        if (!containsRouteWithName(example2.getName())) {
+            addRoute(example2.getName(), example2.getDistance(), example2.getCompletions(), example2.getAvgSpeed());
+        }
 
         RouteListAdapter adapter = new RouteListAdapter
                 (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
         listView.setAdapter(adapter);
+    }
+
+    public boolean containsRouteWithName(String name) {
+        for (int i = 0; i < routeListItems.size(); i++) {
+            if (routeListItems.get(i).getName() == name) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void addRoute(String name, String distance, String completions, String avgSpeed) {
