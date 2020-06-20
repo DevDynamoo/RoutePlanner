@@ -11,6 +11,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -20,6 +21,7 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -28,13 +30,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
-public class CreateRouteActivity extends FragmentActivity
-        implements OnMapReadyCallback {
+import java.util.Stack;
 
+public class CreateRouteActivity extends FragmentActivity
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = CreateRouteActivity.class.getSimpleName();
     private GoogleMap map;
     private CameraPosition cameraPosition;
+    private Stack<Marker> markerStack = new Stack<Marker>();
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
@@ -56,7 +60,6 @@ public class CreateRouteActivity extends FragmentActivity
     // Keys for storing activity state.
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +83,60 @@ public class CreateRouteActivity extends FragmentActivity
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
     }
+
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        this.map = googleMap;
+
+        // Example markers
+        MarkerOptions DTU = new MarkerOptions()
+                .position(new LatLng(55.7858105, 12.5195605))
+                .title("DTU markør")
+                .draggable(true);
+        MarkerOptions Nybrogaard = new MarkerOptions()
+                .position(new LatLng(55.772927, 12.473438))
+                .title("Nybrogaard")
+                .draggable(true);
+        Marker dtuMarker = map.addMarker(DTU);
+        Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
+
+        // Sets a listener on the map to handle the event of
+        // the user long pressing anywhere on the map that is not a marker
+        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+            @Override
+            public void onMapLongClick(LatLng latLng) {
+                MarkerOptions newMarkerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .title("New marker")
+                        .draggable(true);
+                Marker newMarker = map.addMarker(newMarkerOptions);
+                Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_LONG).show();
+                markerStack.push(newMarker);
+            }
+        });
+
+        map.setOnMarkerClickListener(this);
+
+        getLocationPermission();
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+    }
+
+    public boolean onMarkerClick(final Marker marker) {
+        // Center camera on marker clicked and zoom to default zoom level
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));
+
+        Toast.makeText(getApplicationContext(), "Marker clicked", Toast.LENGTH_SHORT).show();
+
+        // Return true to mark the event is consumed
+        // and prevent any extra UI menus to appear
+        return true;
+    }
+
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -96,6 +153,7 @@ public class CreateRouteActivity extends FragmentActivity
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -113,23 +171,6 @@ public class CreateRouteActivity extends FragmentActivity
         updateLocationUI();
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        LatLng dtu = new LatLng(55.7858105, 12.5195605);
-        googleMap.addMarker(new MarkerOptions()
-                .position(dtu)
-                .title("DTU Markør"));
-
-        this.map = googleMap;
-
-        getLocationPermission();
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
-    }
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -164,7 +205,6 @@ public class CreateRouteActivity extends FragmentActivity
         }
     }
 
-
     private void updateLocationUI() {
         if (map == null) {
             return;
@@ -183,6 +223,7 @@ public class CreateRouteActivity extends FragmentActivity
             Log.e("Exception: %s", e.getMessage());
         }
     }
+
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         if (map != null) {
@@ -190,5 +231,9 @@ public class CreateRouteActivity extends FragmentActivity
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public Stack<Marker> getMarkerStack() {
+        return markerStack;
     }
 }
