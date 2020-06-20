@@ -1,6 +1,7 @@
 package com.example.routeplanner;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -72,11 +73,32 @@ public class CreateRouteInteractFragment extends Fragment {
                 Stack<Marker> markerStack = ((CreateRouteActivity) getActivity()).getMarkerStack();
                 Stack<Polyline> polylineStack = ((CreateRouteActivity) getActivity()).getPolylineStack();
 
+                if (markerStack.size() >= 2) {
+                    LatLng lastPosition = markerStack.get(markerStack.size()-1).getPosition();
+                    LatLng secondLastPosition = markerStack.get(markerStack.size()-2).getPosition();
+                    removeDistance(lastPosition, secondLastPosition);
+                }
+
                 if (!markerStack.isEmpty() && !polylineStack.isEmpty()) {
                     markerStack.pop().remove();
                     polylineStack.pop().remove();
                 }
             }
         });
+    }
+
+    private void removeDistance(LatLng lastPosition, LatLng secondLastPosition) {
+        float[] results = new float[1];
+        Location.distanceBetween(
+                lastPosition.latitude,
+                lastPosition.longitude,
+                secondLastPosition.latitude,
+                secondLastPosition.longitude,
+                results
+        );
+        ((CreateRouteActivity) getActivity()).calculateNewLength(results[0],false);
+    }
+    public void updateCalcLengthText() {
+        mTextViewCalcLength.setText(((CreateRouteActivity) getActivity()).getRouteLength()/1000 + " km");
     }
 }

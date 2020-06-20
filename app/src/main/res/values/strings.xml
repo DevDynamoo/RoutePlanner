@@ -10,7 +10,7 @@
     <string name="button_goto_personal_statistics_text">Personal Statistics</string>
     <string name="button_create_route_text">Create route</string>
     <string name="remove_last_marker_text">Undo marker</string>
-    <string name="route_length">Length of route:</string>
+    <string name="route_length">Approx. route length:</string>
     <string name="name_your_route">Name your route:</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyDvEnjyFXXOywEWQtggkoeGq8wQZwYAFYs</string>

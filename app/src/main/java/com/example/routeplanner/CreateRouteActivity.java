@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -43,6 +44,8 @@ public class CreateRouteActivity extends FragmentActivity
     private CameraPosition cameraPosition;
     private Stack<Marker> markerStack = new Stack<Marker>();
     private Stack<Polyline> polylineStack = new Stack<Polyline>();
+
+    private float routeLength;
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
@@ -78,6 +81,8 @@ public class CreateRouteActivity extends FragmentActivity
 
         setContentView(R.layout.activity_create_route);
 
+        routeLength = 0;
+
         // Construct a FusedLocationProviderClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -93,28 +98,6 @@ public class CreateRouteActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        LatLng dtu = new LatLng(55.7858105, 12.5195605);
-        LatLng nybrogaard = new LatLng(55.772927, 12.473438);
-
-        // Example markers
-        MarkerOptions DTU = new MarkerOptions()
-                .position(dtu)
-                .title("DTU markør")
-                .draggable(true);
-        MarkerOptions Nybrogaard = new MarkerOptions()
-                .position(nybrogaard)
-                .title("Nybrogaard")
-                .draggable(true);
-
-        float[] values = new float[10];
-
-        Location.distanceBetween(dtu.latitude, dtu.longitude,
-                nybrogaard.latitude, nybrogaard.longitude, values);
-
-        Log.i(TAG2, "" + values[0]);
-
-        Marker dtuMarker = map.addMarker(DTU);
-        Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
 
         // Sets a listener on the map to handle the event of
         // the user long pressing anywhere on the map that is not a marker
@@ -142,6 +125,20 @@ public class CreateRouteActivity extends FragmentActivity
 
                 // Push current position and marker on top of respective stacks
                 markerStack.push(newMarker);
+
+                Log.d(TAG, "Size of stack: " + markerStack.size());
+                if (markerStack.size() >= 2) {
+                    float[] results = new float[1];
+                    // Calculates distance between newest and second newest marker and stores them in results[0]
+                    Location.distanceBetween(
+                            newMarker.getPosition().latitude,
+                            newMarker.getPosition().longitude,
+                            markerStack.get(markerStack.size()-2).getPosition().latitude,
+                            markerStack.get(markerStack.size()-2).getPosition().longitude,
+                            results
+                    );
+                    calculateNewLength(results[0], true);
+                }
             }
         });
 
@@ -270,4 +267,16 @@ public class CreateRouteActivity extends FragmentActivity
     public Stack<Marker> getMarkerStack() {
         return markerStack;
     }
+
+    public void calculateNewLength(float distance, boolean addToLength) {
+        routeLength += addToLength ? distance : -distance;
+        TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
+        calcLength.setText(routeLength/1000 + " km");
+        Log.d(TAG, "routeLength: " + routeLength);
+
+    }
+    public float getRouteLength() {
+        return routeLength;
+    }
+
 }
