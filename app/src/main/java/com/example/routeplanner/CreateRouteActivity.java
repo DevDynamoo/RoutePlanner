@@ -33,6 +33,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Stack;
 
 public class CreateRouteActivity extends FragmentActivity
@@ -46,8 +48,6 @@ public class CreateRouteActivity extends FragmentActivity
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
-
-    private final String TAG2 = "Route";
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -93,28 +93,6 @@ public class CreateRouteActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        LatLng dtu = new LatLng(55.7858105, 12.5195605);
-        LatLng nybrogaard = new LatLng(55.772927, 12.473438);
-
-        // Example markers
-        MarkerOptions DTU = new MarkerOptions()
-                .position(dtu)
-                .title("DTU markør")
-                .draggable(true);
-        MarkerOptions Nybrogaard = new MarkerOptions()
-                .position(nybrogaard)
-                .title("Nybrogaard")
-                .draggable(true);
-
-        float[] values = new float[10];
-
-        Location.distanceBetween(dtu.latitude, dtu.longitude,
-                nybrogaard.latitude, nybrogaard.longitude, values);
-
-        Log.i(TAG2, "" + values[0]);
-
-        Marker dtuMarker = map.addMarker(DTU);
-        Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
 
         initializeListeners();
 
@@ -136,6 +114,10 @@ public class CreateRouteActivity extends FragmentActivity
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
+
+                if (markerStack.size() != 0) {
+                    markerStack.peek().setDraggable(false);
+                }
 
                 // Creates new marker at the pressed point
                 MarkerOptions newMarkerOptions = new MarkerOptions()
@@ -161,32 +143,31 @@ public class CreateRouteActivity extends FragmentActivity
         });
 
         // Sets a listener to respond to drag events
-//        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
-//
-//            private Polyline line;
-//            @Override
-//            public void onMarkerDragStart(Marker marker) {
-//                polylineStack.pop().remove();
-//                if (!(markerStack.size() == 1)) {
-//                    markerStack.pop();
-//                }
-//            }
-//
-//            @Override
-//            public void onMarkerDrag(Marker marker) {
-//                line = map.addPolyline(new PolylineOptions()
-//                        .add(markerStack.peek().getPosition(), marker.getPosition())
-//                        .width(10)
-//                        .color(Color.RED));
-//                line.remove();
-//            }
-//
-//            @Override
-//            public void onMarkerDragEnd(Marker marker) {
-//                markerStack.push(marker);
-//                polylineStack.push(line);
-//            }
-//        });
+        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+
+            private ArrayList<LatLng> latLngList = new ArrayList<LatLng>();
+
+            @Override
+            public void onMarkerDragStart(Marker marker) {
+                if (!(markerStack.size() == 1)) {
+                    markerStack.pop();
+                    polylineStack.pop().remove();
+                }
+            }
+
+            @Override
+            public void onMarkerDrag(Marker marker) { }
+
+            @Override
+            public void onMarkerDragEnd(Marker marker) {
+                Polyline line = map.addPolyline(new PolylineOptions()
+                          .add(markerStack.peek().getPosition(), marker.getPosition())
+                          .width(10)
+                          .color(Color.RED));
+                markerStack.push(marker);
+                polylineStack.push(line);
+            }
+        });
     }
 
     public boolean onMarkerClick(final Marker marker) {

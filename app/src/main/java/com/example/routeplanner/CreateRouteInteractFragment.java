@@ -75,6 +75,7 @@ public class CreateRouteInteractFragment extends Fragment {
                 if (!markerStack.isEmpty() && !polylineStack.isEmpty()) {
                     markerStack.pop().remove();
                     polylineStack.pop().remove();
+                    markerStack.peek().setDraggable(true);
                 }
             }
         });
