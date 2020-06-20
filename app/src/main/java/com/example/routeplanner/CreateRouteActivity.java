@@ -276,6 +276,7 @@ public class CreateRouteActivity extends FragmentActivity
         for (int i = 0; i < routeLength.size(); i++) {
             totalRouteLength += routeLength.get(i);
         }
+        //TODO add cyclic route check here
         if (routeLength.size() > 2) {
             totalRouteLength += getDistanceBetweenFirstAndLastMarker();
         }
