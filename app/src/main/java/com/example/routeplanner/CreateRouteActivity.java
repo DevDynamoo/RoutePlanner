@@ -12,6 +12,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -35,6 +36,7 @@ import com.google.android.libraries.places.api.net.PlacesClient;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class CreateRouteActivity extends FragmentActivity
@@ -46,8 +48,12 @@ public class CreateRouteActivity extends FragmentActivity
     private Stack<Marker> markerStack = new Stack<Marker>();
     private Stack<Polyline> polylineStack = new Stack<Polyline>();
 
+    private ArrayList<Float> routeLength;
+
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
+
+    private final String TAG2 = "Route";
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -77,6 +83,8 @@ public class CreateRouteActivity extends FragmentActivity
         }
 
         setContentView(R.layout.activity_create_route);
+
+        routeLength = new ArrayList<>();
 
         // Construct a FusedLocationProviderClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -139,6 +147,21 @@ public class CreateRouteActivity extends FragmentActivity
 
                 // Push current position and marker on top of respective stacks
                 markerStack.push(newMarker);
+
+                Log.d(TAG, "Size of stack: " + markerStack.size());
+                if (markerStack.size() >= 2) {
+                    float[] results = new float[1];
+                    // Calculates distance between newest and second newest marker and stores them in results[0]
+                    Location.distanceBetween(
+                            newMarker.getPosition().latitude,
+                            newMarker.getPosition().longitude,
+                            markerStack.get(markerStack.size()-2).getPosition().latitude,
+                            markerStack.get(markerStack.size()-2).getPosition().longitude,
+                            results
+                    );
+                    routeLength.add(results[0]);
+                    updateCalcLengthText();
+                }
             }
         });
 
@@ -284,4 +307,37 @@ public class CreateRouteActivity extends FragmentActivity
     public Stack<Marker> getMarkerStack() {
         return markerStack;
     }
+
+    public void updateCalcLengthText() {
+        TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
+        float totalRouteLength = 0;
+        for (int i = 0; i < routeLength.size(); i++) {
+            totalRouteLength += routeLength.get(i);
+        }
+        //TODO add cyclic route check here
+        if (routeLength.size() > 2) {
+            totalRouteLength += getDistanceBetweenFirstAndLastMarker();
+        }
+
+        calcLength.setText(totalRouteLength/1000 + " km");
+    }
+
+    private float getDistanceBetweenFirstAndLastMarker() {
+        float[] results = new float[1];
+        LatLng firstMarkerPosition = markerStack.get(0).getPosition();
+        LatLng lastMarkerPosition = markerStack.get(markerStack.size()-1).getPosition();
+        Location.distanceBetween(
+                firstMarkerPosition.latitude,
+                firstMarkerPosition.longitude,
+                lastMarkerPosition.latitude,
+                lastMarkerPosition.longitude,
+                results
+        );
+        return results[0];
+    }
+
+    public ArrayList<Float> getRouteLength() {
+        return routeLength;
+    }
+
 }

@@ -1,6 +1,7 @@
 package com.example.routeplanner;
 
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -17,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -72,6 +74,12 @@ public class CreateRouteInteractFragment extends Fragment {
                 Stack<Marker> markerStack = ((CreateRouteActivity) getActivity()).getMarkerStack();
                 Stack<Polyline> polylineStack = ((CreateRouteActivity) getActivity()).getPolylineStack();
 
+                if (markerStack.size() >= 2) {
+                    LatLng lastPosition = markerStack.get(markerStack.size()-1).getPosition();
+                    LatLng secondLastPosition = markerStack.get(markerStack.size()-2).getPosition();
+                    removeDistance(lastPosition, secondLastPosition);
+                }
+
                 if (!markerStack.isEmpty() && !polylineStack.isEmpty()) {
                     markerStack.pop().remove();
                     polylineStack.pop().remove();
@@ -79,5 +87,11 @@ public class CreateRouteInteractFragment extends Fragment {
                 }
             }
         });
+    }
+
+    private void removeDistance(LatLng lastPosition, LatLng secondLastPosition) {
+        ArrayList<Float> routeLength =  ((CreateRouteActivity) getActivity()).getRouteLength();
+        routeLength.remove(routeLength.size()-1);
+        ((CreateRouteActivity) getActivity()).updateCalcLengthText();
     }
 }
