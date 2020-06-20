@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -29,6 +30,12 @@ import java.util.Stack;
 public class CreateRouteInteractFragment extends Fragment {
     TextView mTextViewCalcLength;
     TextView mTextViewRouteLength;
+    CheckBox cycleCheckBox;
+    Polyline cycleLine;
+
+    ArrayList<Float> routeLength;
+
+    CreateRouteActivity parentActivity;
 
     public static CreateRouteInteractFragment newInstance() {
         CreateRouteInteractFragment fragment = new CreateRouteInteractFragment();
@@ -38,6 +45,8 @@ public class CreateRouteInteractFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        parentActivity = ((CreateRouteActivity) getActivity());
     }
 
     @Override
@@ -67,11 +76,25 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                Stack<Marker> markerStack = ((CreateRouteActivity) getActivity()).getMarkerStack();
-                Stack<Polyline> polylineStack = ((CreateRouteActivity) getActivity()).getPolylineStack();
+                Stack<Marker> markerStack = parentActivity.getMarkerStack();
+                Stack<Polyline> polylineStack = parentActivity.getPolylineStack();
+
+                cycleCheckBox = parentActivity.getCycleCheckBox();
+                cycleLine = parentActivity.getCycleLine();
+
+                routeLength = parentActivity.getRouteLength();
 
                 if (markerStack.size() >= 2) {
-                    LatLng lastPosition = markerStack.get(markerStack.size()-1).getPosition();
+//                    if (cycleCheckBox.isChecked()) {
+//                        cycleLine.remove();
+//                        routeLength.remove(routeLength.size()-1);
+//                        parentActivity.updateCalcLengthText();
+//                    }
+
+//                    parentActivity.getRouteLength().remove(routeLength.size()-1);
+//                    parentActivity.updateCalcLengthText();
+
+                    LatLng lastPosition = markerStack.peek().getPosition();
                     LatLng secondLastPosition = markerStack.get(markerStack.size()-2).getPosition();
                     removeDistance(lastPosition, secondLastPosition);
                 }
@@ -86,8 +109,8 @@ public class CreateRouteInteractFragment extends Fragment {
     }
 
     private void removeDistance(LatLng lastPosition, LatLng secondLastPosition) {
-        ArrayList<Float> routeLength =  ((CreateRouteActivity) getActivity()).getRouteLength();
+        ArrayList<Float> routeLength =  parentActivity.getRouteLength();
         routeLength.remove(routeLength.size()-1);
-        ((CreateRouteActivity) getActivity()).updateCalcLengthText();
+        parentActivity.updateCalcLengthText();
     }
 }

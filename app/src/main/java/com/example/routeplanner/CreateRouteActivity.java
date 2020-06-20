@@ -53,6 +53,7 @@ public class CreateRouteActivity extends FragmentActivity
     private CheckBox cycleCheckBox;
 
     private ArrayList<Float> routeLength;
+    private Polyline cycleLine;
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
@@ -93,12 +94,20 @@ public class CreateRouteActivity extends FragmentActivity
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
                 if (compoundButton.isChecked() && markerStack.size() > 1) {
+
                     float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
                     routeLength.add(cycleDist);
                     updateCalcLengthText();
+
+                    cycleLine = map.addPolyline(new PolylineOptions()
+                            .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
+                            .width(10)
+                            .color(Color.RED));
+
                 } else if (markerStack.size() > 1) {
                     routeLength.remove(routeLength.size()-1);
                     updateCalcLengthText();
+                    cycleLine.remove();
                 }
             }
         });
@@ -175,6 +184,13 @@ public class CreateRouteActivity extends FragmentActivity
                         routeLength.add(result);
                         float newDist = getDistanceBetweenMarkers(markerStack.get(0), newMarker);
                         routeLength.add(newDist);
+
+                        // Replace cycle line
+                        cycleLine.remove();
+                        cycleLine = map.addPolyline(new PolylineOptions()
+                                .add(markerStack.get(0).getPosition(), newMarker.getPosition())
+                                .width(10)
+                                .color(Color.RED));
                     } else {
                         routeLength.add(result);
                     }
@@ -324,25 +340,12 @@ public class CreateRouteActivity extends FragmentActivity
         super.onSaveInstanceState(outState);
     }
 
-    public Stack<Polyline> getPolylineStack() {
-        return polylineStack;
-    }
-
-    public Stack<Marker> getMarkerStack() {
-        return markerStack;
-    }
-
     public void updateCalcLengthText() {
         TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
         float totalRouteLength = 0;
         for (int i = 0; i < routeLength.size(); i++) {
             totalRouteLength += routeLength.get(i);
         }
-
-        //TODO add cyclic route check here
-//        if (routeLength.size() >= 2 && cycleCheckBox.isChecked()) {
-//            totalRouteLength += getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
-//        }
 
         float distance = totalRouteLength/1000;
         float num = (float) Math.round(distance*100)/100;
@@ -367,4 +370,19 @@ public class CreateRouteActivity extends FragmentActivity
         return routeLength;
     }
 
+    public Polyline getCycleLine() {
+        return cycleLine;
+    }
+
+    public Stack<Marker> getMarkerStack() {
+        return markerStack;
+    }
+
+    public Stack<Polyline> getPolylineStack() {
+        return polylineStack;
+    }
+
+    public CheckBox getCycleCheckBox() {
+        return cycleCheckBox;
+    }
 }
