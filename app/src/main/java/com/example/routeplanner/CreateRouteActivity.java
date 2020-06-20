@@ -34,6 +34,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 public class CreateRouteActivity extends FragmentActivity
@@ -45,7 +46,7 @@ public class CreateRouteActivity extends FragmentActivity
     private Stack<Marker> markerStack = new Stack<Marker>();
     private Stack<Polyline> polylineStack = new Stack<Polyline>();
 
-    private float routeLength;
+    private ArrayList<Float> routeLength;
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
@@ -81,7 +82,7 @@ public class CreateRouteActivity extends FragmentActivity
 
         setContentView(R.layout.activity_create_route);
 
-        routeLength = 0;
+        routeLength = new ArrayList<>();
 
         // Construct a FusedLocationProviderClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
@@ -137,7 +138,8 @@ public class CreateRouteActivity extends FragmentActivity
                             markerStack.get(markerStack.size()-2).getPosition().longitude,
                             results
                     );
-                    calculateNewLength(results[0], true);
+                    routeLength.add(results[0]);
+                    updateCalcLengthText();
                 }
             }
         });
@@ -268,14 +270,34 @@ public class CreateRouteActivity extends FragmentActivity
         return markerStack;
     }
 
-    public void calculateNewLength(float distance, boolean addToLength) {
-        routeLength += addToLength ? distance : -distance;
+    public void updateCalcLengthText() {
         TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
-        calcLength.setText(routeLength/1000 + " km");
-        Log.d(TAG, "routeLength: " + routeLength);
+        float totalRouteLength = 0;
+        for (int i = 0; i < routeLength.size(); i++) {
+            totalRouteLength += routeLength.get(i);
+        }
+        if (routeLength.size() > 2) {
+            totalRouteLength += getDistanceBetweenFirstAndLastMarker();
+        }
 
+        calcLength.setText(totalRouteLength/1000 + " km");
     }
-    public float getRouteLength() {
+
+    private float getDistanceBetweenFirstAndLastMarker() {
+        float[] results = new float[1];
+        LatLng firstMarkerPosition = markerStack.get(0).getPosition();
+        LatLng lastMarkerPosition = markerStack.get(markerStack.size()-1).getPosition();
+        Location.distanceBetween(
+                firstMarkerPosition.latitude,
+                firstMarkerPosition.longitude,
+                lastMarkerPosition.latitude,
+                lastMarkerPosition.longitude,
+                results
+        );
+        return results[0];
+    }
+
+    public ArrayList<Float> getRouteLength() {
         return routeLength;
     }
 

@@ -18,6 +18,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 /**
@@ -88,17 +89,8 @@ public class CreateRouteInteractFragment extends Fragment {
     }
 
     private void removeDistance(LatLng lastPosition, LatLng secondLastPosition) {
-        float[] results = new float[1];
-        Location.distanceBetween(
-                lastPosition.latitude,
-                lastPosition.longitude,
-                secondLastPosition.latitude,
-                secondLastPosition.longitude,
-                results
-        );
-        ((CreateRouteActivity) getActivity()).calculateNewLength(results[0],false);
-    }
-    public void updateCalcLengthText() {
-        mTextViewCalcLength.setText(((CreateRouteActivity) getActivity()).getRouteLength()/1000 + " km");
+        ArrayList<Float> routeLength =  ((CreateRouteActivity) getActivity()).getRouteLength();
+        routeLength.remove(routeLength.size()-1);
+        ((CreateRouteActivity) getActivity()).updateCalcLengthText();
     }
 }
