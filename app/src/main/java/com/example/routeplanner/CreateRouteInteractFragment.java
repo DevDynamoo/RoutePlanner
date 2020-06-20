@@ -12,6 +12,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Marker;
+
+import java.util.Stack;
+
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link CreateRouteInteractFragment#newInstance} factory method to
@@ -61,7 +66,12 @@ public class CreateRouteInteractFragment extends Fragment {
         undoMarkerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Implement code that removes last marker
+
+                // Pop last marker in stack and remove it from the map
+                Stack<Marker> stack = ((CreateRouteActivity) getActivity()).getMarkerStack();
+                if (!stack.isEmpty()) {
+                    stack.pop().remove();
+                }
             }
         });
     }

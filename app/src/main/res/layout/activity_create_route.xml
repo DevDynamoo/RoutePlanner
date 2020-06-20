@@ -11,8 +11,9 @@
         android:id="@+id/route_title_fragment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="4"
-        tools:context=".CreateRouteActivity"/>
+        android:layout_weight="3"
+        tools:context=".CreateRouteActivity"
+        class="com.example.routeplanner.CreateRouteTitleFragment"/>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:map="http://schemas.android.com/apk/res-auto"
@@ -28,7 +29,7 @@
         android:id="@+id/create_route_interact"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="7"
+        android:layout_weight="6"
         tools:context=".CreateRouteActivity"
         class= "com.example.routeplanner.CreateRouteInteractFragment"/>
 </LinearLayout>

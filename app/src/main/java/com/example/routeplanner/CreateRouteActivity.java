@@ -30,12 +30,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
+import java.util.Stack;
+
 public class CreateRouteActivity extends FragmentActivity
         implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = CreateRouteActivity.class.getSimpleName();
     private GoogleMap map;
     private CameraPosition cameraPosition;
+    private Stack<Marker> markerStack = new Stack<Marker>();
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
@@ -108,6 +111,7 @@ public class CreateRouteActivity extends FragmentActivity
                         .draggable(true);
                 Marker newMarker = map.addMarker(newMarkerOptions);
                 Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_LONG).show();
+                markerStack.push(newMarker);
             }
         });
 
@@ -227,5 +231,9 @@ public class CreateRouteActivity extends FragmentActivity
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public Stack<Marker> getMarkerStack() {
+        return markerStack;
     }
 }
