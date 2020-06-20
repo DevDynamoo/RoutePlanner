@@ -30,10 +30,6 @@ public class CreateRouteInteractFragment extends Fragment {
     TextView mTextViewCalcLength;
     TextView mTextViewRouteLength;
 
-    public CreateRouteInteractFragment() {
-        // Required empty public constructor
-    }
-
     public static CreateRouteInteractFragment newInstance() {
         CreateRouteInteractFragment fragment = new CreateRouteInteractFragment();
         return fragment;

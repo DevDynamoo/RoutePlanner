@@ -146,22 +146,13 @@ public class CreateRouteActivity extends FragmentActivity
                 Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_SHORT).show();
 
                 // Push current position and marker on top of respective stacks
-                markerStack.push(newMarker);
-
                 Log.d(TAG, "Size of stack: " + markerStack.size());
-                if (markerStack.size() >= 2) {
-                    float[] results = new float[1];
-                    // Calculates distance between newest and second newest marker and stores them in results[0]
-                    Location.distanceBetween(
-                            newMarker.getPosition().latitude,
-                            newMarker.getPosition().longitude,
-                            markerStack.get(markerStack.size()-2).getPosition().latitude,
-                            markerStack.get(markerStack.size()-2).getPosition().longitude,
-                            results
-                    );
-                    routeLength.add(results[0]);
+                if (markerStack.size() >= 1) {
+                    float result = getDistanceBetweenMarkers(newMarker, markerStack.peek());
+                    routeLength.add(result);
                     updateCalcLengthText();
                 }
+                markerStack.push(newMarker);
             }
         });
 
@@ -175,6 +166,7 @@ public class CreateRouteActivity extends FragmentActivity
                 if (!(markerStack.size() == 1)) {
                     markerStack.pop();
                     polylineStack.pop().remove();
+                    routeLength.remove(routeLength.size()-1);
                 }
             }
 
@@ -183,12 +175,16 @@ public class CreateRouteActivity extends FragmentActivity
 
             @Override
             public void onMarkerDragEnd(Marker marker) {
+                float result = getDistanceBetweenMarkers(markerStack.peek(), marker);
+                routeLength.add(result);
+                updateCalcLengthText();
                 Polyline line = map.addPolyline(new PolylineOptions()
                           .add(markerStack.peek().getPosition(), marker.getPosition())
                           .width(10)
                           .color(Color.RED));
                 markerStack.push(marker);
                 polylineStack.push(line);
+
             }
         });
     }
@@ -315,17 +311,19 @@ public class CreateRouteActivity extends FragmentActivity
             totalRouteLength += routeLength.get(i);
         }
         //TODO add cyclic route check here
-        if (routeLength.size() > 2) {
-            totalRouteLength += getDistanceBetweenFirstAndLastMarker();
-        }
+//        if (routeLength.size() >= 2) {
+//            totalRouteLength += getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
+//        }
 
-        calcLength.setText(totalRouteLength/1000 + " km");
+        float distance = totalRouteLength/1000;
+        float num = (float) Math.round(distance*100)/100;
+        calcLength.setText(num + " km");
     }
 
-    private float getDistanceBetweenFirstAndLastMarker() {
+    private float getDistanceBetweenMarkers(Marker A, Marker B) {
         float[] results = new float[1];
-        LatLng firstMarkerPosition = markerStack.get(0).getPosition();
-        LatLng lastMarkerPosition = markerStack.get(markerStack.size()-1).getPosition();
+        LatLng firstMarkerPosition = A.getPosition();
+        LatLng lastMarkerPosition = B.getPosition();
         Location.distanceBetween(
                 firstMarkerPosition.latitude,
                 firstMarkerPosition.longitude,
