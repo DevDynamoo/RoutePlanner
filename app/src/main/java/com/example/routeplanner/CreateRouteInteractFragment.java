@@ -13,7 +13,9 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.Polyline;
 
 import java.util.Stack;
 
@@ -67,10 +69,12 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                // Pop last marker in stack and remove it from the map
-                Stack<Marker> stack = ((CreateRouteActivity) getActivity()).getMarkerStack();
-                if (!stack.isEmpty()) {
-                    stack.pop().remove();
+                Stack<Marker> markerStack = ((CreateRouteActivity) getActivity()).getMarkerStack();
+                Stack<Polyline> polylineStack = ((CreateRouteActivity) getActivity()).getPolylineStack();
+
+                if (!markerStack.isEmpty() && !polylineStack.isEmpty()) {
+                    markerStack.pop().remove();
+                    polylineStack.pop().remove();
                 }
             }
         });
