@@ -31,7 +31,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
 public class CreateRouteActivity extends FragmentActivity
-        implements OnMapReadyCallback {
+        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final String TAG = CreateRouteActivity.class.getSimpleName();
     private GoogleMap map;
@@ -94,22 +94,24 @@ public class CreateRouteActivity extends FragmentActivity
                 .position(new LatLng(55.772927, 12.473438))
                 .title("Nybrogaard")
                 .draggable(true);
-        map.addMarker(DTU);
-        map.addMarker(Nybrogaard);
+        Marker dtuMarker = map.addMarker(DTU);
+        Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
 
         // Sets a listener on the map to handle the event of
         // the user long pressing anywhere on the map that is not a marker
         map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-                MarkerOptions newMarker = new MarkerOptions()
+                MarkerOptions newMarkerOptions = new MarkerOptions()
                         .position(latLng)
                         .title("New marker")
                         .draggable(true);
-                map.addMarker(newMarker);
+                Marker newMarker = map.addMarker(newMarkerOptions);
                 Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_LONG).show();
             }
         });
+
+        map.setOnMarkerClickListener(this);
 
         getLocationPermission();
 
@@ -118,6 +120,17 @@ public class CreateRouteActivity extends FragmentActivity
 
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
+    }
+
+    public boolean onMarkerClick(final Marker marker) {
+        // Center camera on marker clicked and zoom to default zoom level
+        map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));
+
+        Toast.makeText(getApplicationContext(), "Marker clicked", Toast.LENGTH_SHORT).show();
+
+        // Return true to mark the event is consumed
+        // and prevent any extra UI menus to appear
+        return true;
     }
 
     private void getLocationPermission() {

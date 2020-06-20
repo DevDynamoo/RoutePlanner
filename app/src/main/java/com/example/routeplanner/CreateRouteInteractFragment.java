@@ -20,7 +20,6 @@ import android.widget.TextView;
 public class CreateRouteInteractFragment extends Fragment {
     TextView mTextViewCalcLength;
     TextView mTextViewRouteLength;
-    EditText mEditTextRouteName;
 
     public CreateRouteInteractFragment() {
         // Required empty public constructor
@@ -41,7 +40,6 @@ public class CreateRouteInteractFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_route_interact, container, false);
-
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -51,14 +49,19 @@ public class CreateRouteInteractFragment extends Fragment {
 
         mTextViewRouteLength = (TextView) getView().findViewById(R.id.textView_route_length);
 
-        mEditTextRouteName = (EditText) getView().findViewById(R.id.editText_route_name);
-        mEditTextRouteName.setText("Route "+(RouteOverviewActivity.getRouteListItems().size()+1));
-
         Button mCreateNewRouteButton = (Button) getView().findViewById(R.id.button_create_route);
         mCreateNewRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //TODO Implement code that generates a new route and stores it
+            }
+        });
+
+        Button undoMarkerButton = (Button) getView().findViewById(R.id.button_undo_marker);
+        undoMarkerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO Implement code that removes last marker
             }
         });
     }
