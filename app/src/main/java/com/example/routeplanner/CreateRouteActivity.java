@@ -116,6 +116,21 @@ public class CreateRouteActivity extends FragmentActivity
         Marker dtuMarker = map.addMarker(DTU);
         Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
 
+        initializeListeners();
+
+        map.setOnMarkerClickListener(this);
+
+        getLocationPermission();
+
+        // Turn on the My Location layer and the related control on the map.
+        updateLocationUI();
+
+        // Get the current location of the device and set the position of the map.
+        getDeviceLocation();
+    }
+
+    private void initializeListeners() {
+
         // Sets a listener on the map to handle the event of
         // the user long pressing anywhere on the map that is not a marker
         map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -145,15 +160,33 @@ public class CreateRouteActivity extends FragmentActivity
             }
         });
 
-        map.setOnMarkerClickListener(this);
-
-        getLocationPermission();
-
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
-
-        // Get the current location of the device and set the position of the map.
-        getDeviceLocation();
+        // Sets a listener to respond to drag events
+//        map.setOnMarkerDragListener(new GoogleMap.OnMarkerDragListener() {
+//
+//            private Polyline line;
+//            @Override
+//            public void onMarkerDragStart(Marker marker) {
+//                polylineStack.pop().remove();
+//                if (!(markerStack.size() == 1)) {
+//                    markerStack.pop();
+//                }
+//            }
+//
+//            @Override
+//            public void onMarkerDrag(Marker marker) {
+//                line = map.addPolyline(new PolylineOptions()
+//                        .add(markerStack.peek().getPosition(), marker.getPosition())
+//                        .width(10)
+//                        .color(Color.RED));
+//                line.remove();
+//            }
+//
+//            @Override
+//            public void onMarkerDragEnd(Marker marker) {
+//                markerStack.push(marker);
+//                polylineStack.push(line);
+//            }
+//        });
     }
 
     public boolean onMarkerClick(final Marker marker) {
