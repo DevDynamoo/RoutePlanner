@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
@@ -24,6 +25,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
@@ -39,9 +42,12 @@ public class CreateRouteActivity extends FragmentActivity
     private GoogleMap map;
     private CameraPosition cameraPosition;
     private Stack<Marker> markerStack = new Stack<Marker>();
+    private Stack<Polyline> polylineStack = new Stack<Polyline>();
 
     // The entry point to the Places API.
     private PlacesClient mPlacesClient;
+
+    private final String TAG2 = "Route";
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -87,30 +93,54 @@ public class CreateRouteActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
+        LatLng dtu = new LatLng(55.7858105, 12.5195605);
+        LatLng nybrogaard = new LatLng(55.772927, 12.473438);
 
         // Example markers
         MarkerOptions DTU = new MarkerOptions()
-                .position(new LatLng(55.7858105, 12.5195605))
+                .position(dtu)
                 .title("DTU markør")
                 .draggable(true);
         MarkerOptions Nybrogaard = new MarkerOptions()
-                .position(new LatLng(55.772927, 12.473438))
+                .position(nybrogaard)
                 .title("Nybrogaard")
                 .draggable(true);
+
+        float[] values = new float[10];
+
+        Location.distanceBetween(dtu.latitude, dtu.longitude,
+                nybrogaard.latitude, nybrogaard.longitude, values);
+
+        Log.i(TAG2, "" + values[0]);
+
         Marker dtuMarker = map.addMarker(DTU);
         Marker nybrogaardMarker =  map.addMarker(Nybrogaard);
 
         // Sets a listener on the map to handle the event of
         // the user long pressing anywhere on the map that is not a marker
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
+        map.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
-            public void onMapLongClick(LatLng latLng) {
+            public void onMapClick(LatLng latLng) {
+
+                // Creates new marker at the pressed point
                 MarkerOptions newMarkerOptions = new MarkerOptions()
                         .position(latLng)
                         .title("New marker")
                         .draggable(true);
                 Marker newMarker = map.addMarker(newMarkerOptions);
-                Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_LONG).show();
+
+                // Creates a line between the given points
+                if (!markerStack.isEmpty()) {
+                    Polyline line = map.addPolyline(new PolylineOptions()
+                            .add(markerStack.peek().getPosition(), latLng)
+                            .width(10)
+                            .color(Color.RED));
+                    polylineStack.push(line);
+                }
+
+                Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_SHORT).show();
+
+                // Push current position and marker on top of respective stacks
                 markerStack.push(newMarker);
             }
         });
@@ -231,6 +261,10 @@ public class CreateRouteActivity extends FragmentActivity
             outState.putParcelable(KEY_LOCATION, lastKnownLocation);
         }
         super.onSaveInstanceState(outState);
+    }
+
+    public Stack<Polyline> getPolylineStack() {
+        return polylineStack;
     }
 
     public Stack<Marker> getMarkerStack() {
