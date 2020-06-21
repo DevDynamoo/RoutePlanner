@@ -181,13 +181,18 @@ public class CreateRouteActivity extends FragmentActivity
                     // If checkbox is checked, replace final cycle length
                     // with new final cycle length
                     if ( cycleCheckBox.isChecked() ) {
-                        routeLength.remove(routeLength.size()-1);
+                        if (markerStack.size() > 1) {
+                            routeLength.remove(routeLength.size()-1);
+                        }
+
                         routeLength.add(result);
                         float newDist = getDistanceBetweenMarkers(markerStack.get(0), newMarker);
                         routeLength.add(newDist);
 
                         // Replace cycle line
-                        cycleLine.remove();
+                        if (markerStack.size() > 1) {
+                            cycleLine.remove();
+                        }
                         cycleLine = map.addPolyline(new PolylineOptions()
                                 .add(markerStack.get(0).getPosition(), newMarker.getPosition())
                                 .width(10)
@@ -381,6 +386,14 @@ public class CreateRouteActivity extends FragmentActivity
 
     public Stack<Polyline> getPolylineStack() {
         return polylineStack;
+    }
+
+    public GoogleMap getMap() {
+        return map;
+    }
+
+    public void setCycleLine(Polyline cycleLine) {
+        this.cycleLine = cycleLine;
     }
 
     public CheckBox getCycleCheckBox() {
