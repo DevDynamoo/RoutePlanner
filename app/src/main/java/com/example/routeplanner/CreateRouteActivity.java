@@ -1,7 +1,6 @@
 package com.example.routeplanner;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
@@ -11,10 +10,8 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,8 +34,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.net.PlacesClient;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -99,7 +94,7 @@ public class CreateRouteActivity extends FragmentActivity
                     routeLength.add(cycleDist);
                     updateCalcLengthText();
 
-                    createCycleLine();
+                    createCycleLineBetweenFirstAndLast();
 
                 } else if (markerStack.size() > 2) {
                     routeLength.remove(routeLength.size()-1);
@@ -123,7 +118,7 @@ public class CreateRouteActivity extends FragmentActivity
         mapFragment.getMapAsync((OnMapReadyCallback) this);
     }
 
-    protected void createCycleLine() {
+    protected void createCycleLineBetweenFirstAndLast() {
         cycleLine = map.addPolyline(new PolylineOptions()
                 .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
                 .width(10)

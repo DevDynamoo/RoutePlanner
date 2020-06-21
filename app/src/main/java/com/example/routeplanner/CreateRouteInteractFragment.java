@@ -1,8 +1,5 @@
 package com.example.routeplanner;
 
-import android.content.Intent;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -12,14 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
-import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -110,9 +104,9 @@ public class CreateRouteInteractFragment extends Fragment {
 
                 if (cycleCheckBox.isChecked()) {
                     cycleLine.remove();
-                    routeLength.remove(routeLength.size()-1);
+                    //routeLength.remove(routeLength.size()-1);
 
-                    parentActivity.createCycleLine();
+                    parentActivity.createCycleLineBetweenFirstAndLast();
                     float cycleDist = parentActivity.getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
                     routeLength.add(cycleDist);
 
