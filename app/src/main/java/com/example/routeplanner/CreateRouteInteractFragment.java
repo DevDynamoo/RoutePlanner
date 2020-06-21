@@ -1,6 +1,7 @@
 package com.example.routeplanner;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 
@@ -18,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -97,12 +99,25 @@ public class CreateRouteInteractFragment extends Fragment {
                     LatLng lastPosition = markerStack.peek().getPosition();
                     LatLng secondLastPosition = markerStack.get(markerStack.size()-2).getPosition();
                     removeDistance(lastPosition, secondLastPosition);
+
                 }
 
                 if (!markerStack.isEmpty() && !polylineStack.isEmpty()) {
                     markerStack.pop().remove();
                     polylineStack.pop().remove();
                     markerStack.peek().setDraggable(true);
+                }
+
+                if (cycleCheckBox.isChecked()) {
+                    cycleLine.remove();
+                    routeLength.remove(routeLength.size()-1);
+
+                    parentActivity.createCycleLine();
+                    float cycleDist = parentActivity.getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
+                    routeLength.add(cycleDist);
+
+                    parentActivity.updateCalcLengthText();
+
                 }
             }
         });

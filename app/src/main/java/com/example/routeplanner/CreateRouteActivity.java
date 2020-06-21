@@ -93,18 +93,15 @@ public class CreateRouteActivity extends FragmentActivity
         cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked() && markerStack.size() > 1) {
+                if (compoundButton.isChecked() && markerStack.size() > 2) {
 
                     float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
                     routeLength.add(cycleDist);
                     updateCalcLengthText();
 
-                    cycleLine = map.addPolyline(new PolylineOptions()
-                            .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
-                            .width(10)
-                            .color(Color.RED));
+                    createCycleLine();
 
-                } else if (markerStack.size() > 1) {
+                } else if (markerStack.size() > 2) {
                     routeLength.remove(routeLength.size()-1);
                     updateCalcLengthText();
                     cycleLine.remove();
@@ -124,6 +121,13 @@ public class CreateRouteActivity extends FragmentActivity
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync((OnMapReadyCallback) this);
+    }
+
+    protected void createCycleLine() {
+        cycleLine = map.addPolyline(new PolylineOptions()
+                .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
+                .width(10)
+                .color(Color.RED));
     }
 
     @Override
@@ -352,7 +356,7 @@ public class CreateRouteActivity extends FragmentActivity
         calcLength.setText(num + " km");
     }
 
-    private float getDistanceBetweenMarkers(Marker A, Marker B) {
+    protected float getDistanceBetweenMarkers(Marker A, Marker B) {
         float[] results = new float[1];
         LatLng firstMarkerPosition = A.getPosition();
         LatLng lastMarkerPosition = B.getPosition();
