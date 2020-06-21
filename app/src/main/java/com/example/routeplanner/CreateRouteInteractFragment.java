@@ -100,6 +100,7 @@ public class CreateRouteInteractFragment extends Fragment {
 
                         // Remove distance of both cycle line and previous line
                         removeDistance();
+                        removeDistance();
 
                         if (markerStack.size() != 1) {
                             cycleLine = map.addPolyline(new PolylineOptions()
@@ -113,6 +114,12 @@ public class CreateRouteInteractFragment extends Fragment {
                                     parentActivity.getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek()) : 0f;
                             routeLength.add(dist);
                         }
+                    } else {
+                        if (markerStack.size() > 1) {
+                            markerStack.pop().remove();
+                            polylineStack.pop().remove();
+                            removeDistance();
+                        }
                     }
                 }
                 Log.i("Routes", "polyLineStack: "+polylineStack.size());
@@ -124,7 +131,6 @@ public class CreateRouteInteractFragment extends Fragment {
 
     private void removeDistance() {
         ArrayList<Float> routeLength =  parentActivity.getRouteLength();
-        routeLength.remove(routeLength.size()-1);
         routeLength.remove(routeLength.size()-1);
         parentActivity.updateCalcLengthText();
     }
