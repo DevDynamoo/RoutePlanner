@@ -87,4 +87,16 @@ public class RouteListItem {
     public void setAvgSpeed(String avgSpeed) {
         this.avgSpeed = avgSpeed;
     }
+
+    public String getDistance() {
+        return distance;
+    }
+
+    public String getCompletions() {
+        return completions;
+    }
+
+    public String getAvgSpeed() {
+        return avgSpeed;
+    }
 }

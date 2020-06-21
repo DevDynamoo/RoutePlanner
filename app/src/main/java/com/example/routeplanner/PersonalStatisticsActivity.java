@@ -1,14 +1,109 @@
 package com.example.routeplanner;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class PersonalStatisticsActivity extends AppCompatActivity {
+
+    public static ArrayList<StatisticsData> statisticsDataItems = new ArrayList<>();
+
+    DatabaseReference rootRef;
+    String ID;
+
+    TextView Display_distance;
+    TextView Display_time;
+    TextView Display_avrspeed;
+
+    public int totalTime;
+    public double AvrSpeed;
+    public double totalDistance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_personal_statistics);
+
+        //Get reference
+        rootRef= FirebaseDatabase.getInstance().getReference().child("PersonalStats");
+        ID="-MAD-Y5CEBd4OA0yp7g4";
+        //Setting textview
+        Display_distance = findViewById(R.id.displaydistance);
+        Display_time = findViewById(R.id.displaytime);
+        Display_avrspeed =findViewById(R.id.displayspeed);
+
+        //Getting lastest stats
+        rootRef.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                 @Override
+                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                     //Getting info to stats
+                     totalTime=dataSnapshot.getValue(PersonalStats.class).getTime();
+                     AvrSpeed=Calspeed(dataSnapshot.getValue(PersonalStats.class).getNum(),dataSnapshot.getValue(PersonalStats.class).getTotalspeed());
+                     totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
+
+                     //Calculating statistics
+
+
+                     //Viewing staticstics
+                     Display_time.setText("Total Time: "+totalTime);
+                     Display_distance.setText("Total distance: "+totalDistance);
+                     Display_avrspeed.setText("Overall Average speed:"+AvrSpeed);
+                 }
+
+                 @Override
+                 public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                 }
+             });
+
+
+
+
     }
+
+
+    private double Calspeed(int num, double total )  {
+
+            return (total / (double) num );
+
+    }
+
+
 }
+
+
+
+
+//Delete
+// deleteItem("");
+
+/*
+  private void deleteItem(String key) {
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("StatisticsData").child(key);
+        ref.removeValue();
+        Toast.makeText(this,"Data deleted",Toast.LENGTH_LONG).show();
+
+    }
+ */

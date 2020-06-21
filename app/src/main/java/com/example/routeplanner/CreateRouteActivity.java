@@ -5,6 +5,7 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import android.graphics.Color;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Location;
@@ -15,6 +16,7 @@ import android.widget.CompoundButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -24,6 +26,10 @@ import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.util.ArrayList;
 
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -74,6 +80,9 @@ public class CreateRouteActivity extends FragmentActivity
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
+    private GoogleMap mMap;
+    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
+    Polyline line;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +93,7 @@ public class CreateRouteActivity extends FragmentActivity
         }
 
         setContentView(R.layout.activity_create_route);
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
         cycleCheckBox = findViewById(R.id.checkBox);
         cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
@@ -120,6 +130,15 @@ public class CreateRouteActivity extends FragmentActivity
         mapFragment.getMapAsync((OnMapReadyCallback) this);
     }
 
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
     protected void createCycleLineBetweenFirstAndLast() {
         cycleLine = map.addPolyline(new PolylineOptions()
                 .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
