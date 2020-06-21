@@ -24,29 +24,7 @@ public class RouteListItem {
         this.avgSpeed = avgSpeed;
     }
 
-    public Stack<Marker> getMarkerStack() {
-        return markerStack;
-    }
-
-    public void setMarkerStack(Stack<Marker> markerStack) {
-        this.markerStack = markerStack;
-    }
-
-    public Stack<Polyline> getPolylineStack() {
-        return polylineStack;
-    }
-
-    public void setPolylineStack(Stack<Polyline> polylineStack) {
-        this.polylineStack = polylineStack;
-    }
-
-    public Polyline getCycleLine() {
-        return cycleLine;
-    }
-
-    public void setCycleLine(Polyline cycleLine) {
-        this.cycleLine = cycleLine;
-    }
+    public RouteListItem() { }
 
     public int getId() {
         return id;
@@ -88,15 +66,27 @@ public class RouteListItem {
         this.avgSpeed = avgSpeed;
     }
 
-    public String getDistance() {
-        return distance;
+    public Stack<Marker> getMarkerStack() {
+        return markerStack;
     }
 
-    public String getCompletions() {
-        return completions;
+    public void setMarkerStack(Stack<Marker> markerStack) {
+        this.markerStack = markerStack;
     }
 
-    public String getAvgSpeed() {
-        return avgSpeed;
+    public Stack<Polyline> getPolylineStack() {
+        return polylineStack;
+    }
+
+    public void setPolylineStack(Stack<Polyline> polylineStack) {
+        this.polylineStack = polylineStack;
+    }
+
+    public Polyline getCycleLine() {
+        return cycleLine;
+    }
+
+    public void setCycleLine(Polyline cycleLine) {
+        this.cycleLine = cycleLine;
     }
 }

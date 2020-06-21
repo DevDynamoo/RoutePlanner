@@ -3,8 +3,6 @@ package com.example.routeplanner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
@@ -14,14 +12,11 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
 public class RouteOverviewActivity extends AppCompatActivity {
-
     private static final String TAG = "RouteOverview";
     private static ArrayList<RouteListItem> routeListItems = new ArrayList<>();
     private FirebaseDatabase appDatabase;
@@ -35,9 +30,12 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
         Log.i(TAG, "onCreate called");
 
+        // appDatabase = FirebaseDatabase.getInstance();
+        // DatabaseReference ref = appDatabase.getReference("Routes");
+        // ref.setValue(example1, example2);
+
         //Setting reference
         ref= FirebaseDatabase.getInstance().getReference().child("RouteListItem");
-
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -49,37 +47,27 @@ public class RouteOverviewActivity extends AppCompatActivity {
                             ds.getValue(RouteListItem.class).getAvgSpeed());
 
                     ListView listView = (ListView) findViewById(R.id.listView);
-
-        // Example routes to be deleted later
-        RouteListItem example1 = new RouteListItem("My route", "10 km", "2", "15 km/h");
-        RouteListItem example2 = new RouteListItem("Marathon", "42 km", "0", "15 km/h");
-
-       // appDatabase = FirebaseDatabase.getInstance();
-       // DatabaseReference ref = appDatabase.getReference("Routes");
-       // ref.setValue(example1, example2);
-
-        // Example routes created in onCreate method
-        // Should be added in another way through user interaction
-        if (!containsRouteWithName(example1.getName())) {
-            addRoute(example1.getName(), example1.getDistance(), example1.getCompletions(), example1.getAvgSpeed());
-        }
-        if (!containsRouteWithName(example2.getName())) {
-            addRoute(example2.getName(), example2.getDistance(), example2.getCompletions(), example2.getAvgSpeed());
-        }
-
                     RouteListAdapter adapter = new RouteListAdapter
                             (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
                     listView.setAdapter(adapter);
                 }
             }
-
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
 
-
+//        // Example routes to be deleted later
+//        RouteListItem example1 = new RouteListItem("My route", "10 km", "2", "15 km/h");
+//        RouteListItem example2 = new RouteListItem("Marathon", "42 km", "0", "15 km/h");
+//
+//        // Example routes created in onCreate method
+//        // Should be added in another way through user interaction
+//        if (!containsRouteWithName(example1.getName())) {
+//            addRoute(example1.getName(), example1.getDistance(), example1.getCompletions(), example1.getAvgSpeed());
+//        }
+//        if (!containsRouteWithName(example2.getName())) {
+//            addRoute(example2.getName(), example2.getDistance(), example2.getCompletions(), example2.getAvgSpeed());
+//        }
     }
 
     public boolean containsRouteWithName(String name) {
@@ -98,7 +86,6 @@ public class RouteOverviewActivity extends AppCompatActivity {
         item.setName(name);
         item.setDistance(distance);
         routeListItems.add(item);
-
     }
 
     public void removeRoute(int position) {
