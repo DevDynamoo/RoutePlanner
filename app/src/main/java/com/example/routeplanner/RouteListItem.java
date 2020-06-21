@@ -1,7 +1,6 @@
 package com.example.routeplanner;
 
 import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.Polyline;
 
 import java.util.Stack;
 
@@ -10,21 +9,21 @@ public class RouteListItem {
     private int id;
     private String name;
     private String distance;
-    private String completions;
+    private int completions;
     private String avgSpeed;
+    private Stack<Marker> markers;
+    private boolean cyclic;
 
-    private Stack<Marker> markerStack = new Stack<Marker>();
-    private Stack<Polyline> polylineStack = new Stack<Polyline>();
-    private Polyline cycleLine;
-
-    public RouteListItem(String name, String distance, String completions, String avgSpeed) {
+    public RouteListItem(String name, String distance, Stack<Marker> markers, boolean cyclic) {
         this.name = name;
         this.distance = distance;
-        this.completions = completions;
-        this.avgSpeed = avgSpeed;
+        this.markers = markers;
+        this.cyclic = cyclic;
+        avgSpeed = "Route not run yet";
     }
-
-    public RouteListItem() { }
+    public RouteListItem() {
+        avgSpeed = "Route not run yet";
+    }
 
     public int getId() {
         return id;
@@ -50,11 +49,11 @@ public class RouteListItem {
         this.distance = distance;
     }
 
-    public String getCompletions() {
+    public int getCompletions() {
         return completions;
     }
 
-    public void setCompletions(String completions) {
+    public void setCompletions(int completions) {
         this.completions = completions;
     }
 
@@ -66,27 +65,17 @@ public class RouteListItem {
         this.avgSpeed = avgSpeed;
     }
 
-    public Stack<Marker> getMarkerStack() {
-        return markerStack;
+    public boolean isCyclic() {
+        return cyclic;
     }
 
-    public void setMarkerStack(Stack<Marker> markerStack) {
-        this.markerStack = markerStack;
+    public void setCyclic(boolean cyclic) { this.cyclic = cyclic; }
+
+    public Stack<Marker> getMarkers() {
+        return markers;
     }
 
-    public Stack<Polyline> getPolylineStack() {
-        return polylineStack;
-    }
-
-    public void setPolylineStack(Stack<Polyline> polylineStack) {
-        this.polylineStack = polylineStack;
-    }
-
-    public Polyline getCycleLine() {
-        return cycleLine;
-    }
-
-    public void setCycleLine(Polyline cycleLine) {
-        this.cycleLine = cycleLine;
+    public void setMarkers(Stack<Marker> markers) {
+        this.markers = markers;
     }
 }

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ListView;
 
+import com.google.android.gms.maps.model.Marker;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -15,6 +16,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class RouteOverviewActivity extends AppCompatActivity {
     private static final String TAG = "RouteOverview";
@@ -26,7 +28,7 @@ public class RouteOverviewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.route_overview_activity);
+        setContentView(R.layout.activity_route_overview);
 
         Log.i(TAG, "onCreate called");
 
@@ -43,8 +45,8 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
                     addRoute(ds.getValue(RouteListItem.class).getName(),
                             ds.getValue(RouteListItem.class).getDistance(),
-                            ds.getValue(RouteListItem.class).getCompletions(),
-                            ds.getValue(RouteListItem.class).getAvgSpeed());
+                            ds.getValue(RouteListItem.class).getMarkers(),
+                            ds.getValue(RouteListItem.class).isCyclic());
 
                     ListView listView = (ListView) findViewById(R.id.listView);
                     RouteListAdapter adapter = new RouteListAdapter
@@ -79,12 +81,12 @@ public class RouteOverviewActivity extends AppCompatActivity {
         return false;
     }
 
-    public void addRoute(String name, String distance, String completions, String avgSpeed) {
+    public void addRoute(String name, String distance, Stack<Marker> markers, boolean isCyclic) {
         RouteListItem item = new RouteListItem();
-        item.setAvgSpeed(avgSpeed);
-        item.setCompletions(completions);
         item.setName(name);
         item.setDistance(distance);
+        item.setMarkers(markers);
+        item.setCyclic(isCyclic);
         routeListItems.add(item);
     }
 
@@ -94,6 +96,9 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
     public static ArrayList<RouteListItem> getRouteListItems() {
         return routeListItems;
+    }
+    public static int getAmountOfRoutes() {
+        return routeListItems.size();
     }
 }
 
