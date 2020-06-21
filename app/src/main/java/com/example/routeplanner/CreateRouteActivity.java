@@ -89,15 +89,16 @@ public class CreateRouteActivity extends FragmentActivity
         cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked() && markerStack.size() > 2) {
-
-                    float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
-                    routeLength.add(cycleDist);
+                if (compoundButton.isChecked() && markerStack.size() > 1) {
+                    if (markerStack.size() == 2) {
+                        routeLength.add(0f);
+                    } else {
+                        float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
+                        routeLength.add(cycleDist);
+                    }
                     updateCalcLengthText();
-
                     createCycleLineBetweenFirstAndLast();
-
-                } else if (markerStack.size() > 2) {
+                } else if (markerStack.size() > 1) {
                     routeLength.remove(routeLength.size()-1);
                     updateCalcLengthText();
                     cycleLine.remove();
@@ -179,7 +180,7 @@ public class CreateRouteActivity extends FragmentActivity
 
                     // If checkbox is checked, replace final cycle length
                     // with new final cycle length
-                    if (cycleCheckBox.isChecked()) {
+                    if ( cycleCheckBox.isChecked() ) {
                         routeLength.remove(routeLength.size()-1);
                         routeLength.add(result);
                         float newDist = getDistanceBetweenMarkers(markerStack.get(0), newMarker);
