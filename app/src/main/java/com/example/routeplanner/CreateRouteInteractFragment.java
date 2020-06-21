@@ -70,6 +70,7 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO Implement code that generates a new route and stores it
+
             }
         });
 
