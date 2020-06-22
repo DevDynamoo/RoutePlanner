@@ -20,7 +20,6 @@ import java.util.List;
 
 public class PersonalStatisticsActivity extends AppCompatActivity {
 
-
     DatabaseReference rootRef;
     String ID;
 

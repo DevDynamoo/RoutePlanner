@@ -108,11 +108,7 @@ public class RouteOverviewActivity extends AppCompatActivity {
     }
 
     public void addRoute(String name, float distance, String positions, boolean cyclic) {
-        RouteListItem item = new RouteListItem();
-        item.setPositions(positions);
-        item.setCyclic(cyclic);
-        item.setName(name);
-        item.setDistance(distance);
+        RouteListItem item = new RouteListItem(name, distance, positions, cyclic);
         routeListItems.add(item);
     }
 

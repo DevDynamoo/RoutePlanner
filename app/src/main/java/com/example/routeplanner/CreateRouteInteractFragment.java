@@ -39,13 +39,13 @@ public class CreateRouteInteractFragment extends Fragment {
 
     private ArrayList<Float> routeLength;
 
-    //Info to save to database
+    // Info to save to database
     String pos;
     float distance;
     String name;
     boolean isCyclic;
 
-    //Database
+    // Database
     DatabaseReference ref;
     RouteListItem member;
 
@@ -76,9 +76,6 @@ public class CreateRouteInteractFragment extends Fragment {
         // Reference to database
         ref = FirebaseDatabase.getInstance().getReference().child("RouteListItem");
 
-        //New routelistitem
-        member = new RouteListItem();
-
         mTextViewCalcLength = (TextView) getView().findViewById(R.id.textView_calc_length);
         mTextViewCalcLength.setText("0.0 km");
 
@@ -89,29 +86,27 @@ public class CreateRouteInteractFragment extends Fragment {
         mCreateNewRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Implemented: code that generates a new route and stores it
-                pos="";
+
+                // Retrieve information about the created route
                 name = parentActivity.getRouteName();
-
                 distance = parentActivity.updateCalcLengthText();
+                isCyclic = parentActivity.getCycleCheckBox().isChecked();
 
+                // Retrieve markers, and concatenate a string containing all positions
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
-
                 for (Marker m: markerStack) {
                     pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
                 }
 
-                isCyclic = parentActivity.getCycleCheckBox().isChecked();
-
-                member.setPositions(pos);
-                member.setCyclic(isCyclic);
-                member.setDistance(distance);
-                member.setName(name);
-                ref.push().setValue(member);
-
-
+                // Check whether or not at least 2 markers have been set
                 if (!(markerStack.size() <= 1)) {
                     Toast.makeText(parentActivity, "Route created", Toast.LENGTH_SHORT).show();
+
+                    // Save new route to database
+                    RouteListItem member = new RouteListItem(name, distance, pos, isCyclic);
+                    ref.push().setValue(member);
+
+                    // Return flow to main menu
                     Intent intent = new Intent(parentActivity, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
@@ -151,13 +146,9 @@ public class CreateRouteInteractFragment extends Fragment {
                         removeDistance();
 
                         if (markerStack.size() != 1) {
-                            cycleLine = map.addPolyline(new PolylineOptions()
-                                    .add(markerStack.get(0).getPosition(),markerStack.peek().getPosition())
-                                    .width(10)
-                                    .color(Color.RED));
-
+                            cycleLine = parentActivity.createPolylineBetweenMarkers(markerStack.get(0),
+                                    markerStack.peek());
                             parentActivity.setCycleLine(cycleLine);
-
                             float dist = markerStack.size() == 2 ?
                                     parentActivity.getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek()) : 0f;
                             routeLength.add(dist);

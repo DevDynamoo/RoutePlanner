@@ -7,6 +7,15 @@ public class RouteListItem {
     private String positions;
     private boolean cyclic;
 
+    public RouteListItem(String name, float distance, String positions, boolean cyclic) {
+        this.name = name;
+        this.distance = distance;
+        this.positions = positions;
+        this.cyclic = cyclic;
+    }
+
+    public RouteListItem() { }
+
     public String getName() {
         return name;
     }

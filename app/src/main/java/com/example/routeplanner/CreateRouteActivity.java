@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,7 +39,10 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class CreateRouteActivity extends FragmentActivity
-        implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
+        implements OnMapReadyCallback {
+
+    // The entry point to the Places API.
+    private PlacesClient mPlacesClient;
 
     private static final String TAG = CreateRouteActivity.class.getSimpleName();
     private GoogleMap map;
@@ -47,13 +51,10 @@ public class CreateRouteActivity extends FragmentActivity
     private Stack<Polyline> polylineStack = new Stack<Polyline>();
     private CheckBox cycleCheckBox;
 
-    private ArrayList<Float> routeLength;
+    private ArrayList<Float> routeLength = new ArrayList<Float>();
     private Polyline cycleLine;
 
-    // The entry point to the Places API.
-    private PlacesClient mPlacesClient;
 
-    private final String TAG2 = "Route";
 
     // The entry point to the Fused Location Provider.
     private FusedLocationProviderClient mFusedLocationProviderClient;
@@ -69,7 +70,7 @@ public class CreateRouteActivity extends FragmentActivity
     // location retrieved by the Fused Location Provider.
     private Location lastKnownLocation;
 
-    // Keys for storing activity state.
+    // Keys for storing activity state
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
@@ -84,12 +85,10 @@ public class CreateRouteActivity extends FragmentActivity
         }
 
         setContentView(R.layout.activity_create_route);
-        routeLength = new ArrayList<>();
-
-        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         mPlacesClient = Places.createClient(this);
+        mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
@@ -97,28 +96,20 @@ public class CreateRouteActivity extends FragmentActivity
     }
 
     /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
+     * Callback method called when map is ready for use, and can be manipulated
+     * From google:
+     *    "If Google Play services is not installed on the device, the user will be prompted to install
+     *    it inside the SupportMapFragment. This method will only be triggered once the user has
+     *    installed Google Play services and returned to the app."
+     *
      */
-    protected void createCycleLineBetweenFirstAndLast() {
-        cycleLine = map.addPolyline(new PolylineOptions()
-                .add(markerStack.get(0).getPosition(), markerStack.peek().getPosition())
-                .width(10)
-                .color(Color.RED));
-    }
-
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
 
         initializeListeners();
 
-        map.setOnMarkerClickListener(this);
+        // Get permission from user to use device location
         getLocationPermission();
 
         // Turn on the My Location layer and the related control on the map.
@@ -139,7 +130,7 @@ public class CreateRouteActivity extends FragmentActivity
                     float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
                     routeLength.add(cycleDist);
                     updateCalcLengthText();
-                    createCycleLineBetweenFirstAndLast();
+                    cycleLine = createPolylineBetweenMarkers(markerStack.get(0), markerStack.peek());
                 } else if (markerStack.size() > 1) {
                     routeLength.remove(routeLength.size()-1);
                     updateCalcLengthText();
@@ -167,10 +158,7 @@ public class CreateRouteActivity extends FragmentActivity
 
                 // Creates a line between the given points
                 if (!markerStack.isEmpty()) {
-                    Polyline line = map.addPolyline(new PolylineOptions()
-                            .add(markerStack.peek().getPosition(), latLng)
-                            .width(10)
-                            .color(Color.RED));
+                    Polyline line = createPolylineBetweenMarkers(markerStack.peek(), newMarker);
                     polylineStack.push(line);
                 }
 
@@ -195,10 +183,7 @@ public class CreateRouteActivity extends FragmentActivity
                         if (markerStack.size() > 1) {
                             cycleLine.remove();
                         }
-                        cycleLine = map.addPolyline(new PolylineOptions()
-                                .add(markerStack.get(0).getPosition(), newMarker.getPosition())
-                                .width(10)
-                                .color(Color.RED));
+                        cycleLine = createPolylineBetweenMarkers(markerStack.get(0), newMarker);
                     } else {
                         routeLength.add(result);
                     }
@@ -230,27 +215,26 @@ public class CreateRouteActivity extends FragmentActivity
                 float result = getDistanceBetweenMarkers(markerStack.peek(), marker);
                 routeLength.add(result);
                 updateCalcLengthText();
-                Polyline line = map.addPolyline(new PolylineOptions()
-                          .add(markerStack.peek().getPosition(), marker.getPosition())
-                          .width(10)
-                          .color(Color.RED));
+                Polyline line = createPolylineBetweenMarkers(markerStack.peek(), marker);
                 markerStack.push(marker);
                 polylineStack.push(line);
+            }
+        });
 
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));
+
+                Toast.makeText(getApplicationContext(), "Marker clicked", Toast.LENGTH_SHORT).show();
+
+                // Return true to mark the event is consumed
+                // and prevent any extra UI menus to appear
+                return true;
             }
         });
     }
 
-    public boolean onMarkerClick(final Marker marker) {
-        // Center camera on marker clicked and zoom to default zoom level
-        map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));
-
-        Toast.makeText(getApplicationContext(), "Marker clicked", Toast.LENGTH_SHORT).show();
-
-        // Return true to mark the event is consumed
-        // and prevent any extra UI menus to appear
-        return true;
-    }
     /*
      * Method taken from Maps SDK for Android - Documentation
      * https://developers.google.com/maps/documentation/android-sdk/intro
@@ -360,6 +344,16 @@ public class CreateRouteActivity extends FragmentActivity
         super.onSaveInstanceState(outState);
     }
 
+    // Creates a polyline on the map between two given markers
+    protected Polyline createPolylineBetweenMarkers(Marker A, Marker B) {
+        Polyline line = map.addPolyline(new PolylineOptions()
+                .add(A.getPosition(), B.getPosition())
+                .width(10)
+                .color(Color.RED));
+        return line;
+    }
+
+    // Updates current length of route to display
     public float updateCalcLengthText() {
         TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
         float totalRouteLength = 0;
@@ -416,7 +410,7 @@ public class CreateRouteActivity extends FragmentActivity
     }
 
     public String getRouteName() {
-       return ((CreateRouteTitleFragment) getFragmentManager().findFragmentById(R.id.route_title_fragment))
-               .getRouteName();
+        EditText text = findViewById(R.id.editText_route_name);
+        return text.getText().toString();
     }
 }

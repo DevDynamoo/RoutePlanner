@@ -35,7 +35,4 @@ public class CreateRouteTitleFragment extends Fragment {
         mEditTextRouteName = (EditText) getView().findViewById(R.id.editText_route_name);
         mEditTextRouteName.setText("Route "+(RouteOverviewActivity.getRouteListItems().size()+1));
     }
-    public String getRouteName() {
-        return mEditTextRouteName.getText().toString();
-    }
 }
