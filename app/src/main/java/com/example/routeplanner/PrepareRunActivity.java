@@ -47,11 +47,6 @@ public class PrepareRunActivity extends AppCompatActivity {
                 startActivityForResult(intent, GET_LIST_ITEM_REQUEST_CODE);
             }
         });
-
-
-
-
-
     }
     protected void OnActivityResult(int requestCode, int resultCode, Intent data) {
         if(resultCode == Activity.RESULT_OK &&

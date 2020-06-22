@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -23,10 +24,15 @@ public class RouteOverviewActivity extends AppCompatActivity {
     private static final String TAG = "RouteOverview";
     private static ArrayList<RouteListItem> routeListItems = new ArrayList<>();
     private FirebaseDatabase appDatabase;
+    private RouteListItem dbItem;
     public static final String EXTRA_MESSAGE_ROUTE_OVERVIEW = "com.example.routeplanner.GET_LIST_ITEM";
+
     DatabaseReference ref;
     RouteListItem member;
+
     boolean startedForResult;
+    RouteListAdapter adapter;
+    private ListView listView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +47,26 @@ public class RouteOverviewActivity extends AppCompatActivity {
         } else {
             startedForResult = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_OVERVIEW);
         }
+        listView = (ListView) findViewById(R.id.listView);
+
+        adapter = new RouteListAdapter
+                (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
+
+        listView.setAdapter(adapter);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                if (startedForResult) {
+                    Intent returnIntent = new Intent();
+                    returnIntent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, (Parcelable) adapter.getItem(position));
+                    setResult(RESULT_OK, returnIntent);
+                    Log.d(TAG, "Item clicked");
+                    finish();
+                } else {
+                    Log.d(TAG, "Item not clicked");
+                }
+            }
+        });
 
         Log.i(TAG, "onCreate called");
 
@@ -49,61 +75,30 @@ public class RouteOverviewActivity extends AppCompatActivity {
         // ref.setValue(example1, example2);
 
         //Setting reference
-        ref= FirebaseDatabase.getInstance().getReference().child("RouteListItem");
-
-
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference ref = db.getReference("RouteListItem");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 for(DataSnapshot ds : dataSnapshot.getChildren()) {
 
-                    addRoute(ds.getValue(RouteListItem.class).getName(),
-                            ds.getValue(RouteListItem.class).getDistance(),
-                            ds.getValue(RouteListItem.class).getPostions(),
-                            ds.getValue(RouteListItem.class).isCyclic());
+                    dbItem = ds.getValue(RouteListItem.class);
 
-
-                }
-                ListView listView = (ListView) findViewById(R.id.listView);
-
-                RouteListAdapter adapter = new RouteListAdapter
-                        (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
-                listView.setAdapter(adapter);
-                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                        if (startedForResult) {
-                            Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
-                            returnIntent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, arg1);
-                            setResult(RESULT_OK, returnIntent);
-                            Log.d(TAG, "Item clicked");
-                        } else {
-                            Log.d(TAG, "Item not clicked");
-                        }
+                    if (!containsRouteWithName(dbItem.getName())) {
+                        addRoute(dbItem.getName(), dbItem.getDistance(),
+                                dbItem.getPositions(), dbItem.isCyclic());
+                        adapter.notifyDataSetChanged();
                     }
-                });
+                }
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
         });
-
-//        // Example routes to be deleted later
-//        RouteListItem example1 = new RouteListItem("My route", "10 km", "2", "15 km/h");
-//        RouteListItem example2 = new RouteListItem("Marathon", "42 km", "0", "15 km/h");
-//
-//        // Example routes created in onCreate method
-//        // Should be added in another way through user interaction
-//        if (!containsRouteWithName(example1.getName())) {
-//            addRoute(example1.getName(), example1.getDistance(), example1.getCompletions(), example1.getAvgSpeed());
-//        }
-//        if (!containsRouteWithName(example2.getName())) {
-//            addRoute(example2.getName(), example2.getDistance(), example2.getCompletions(), example2.getAvgSpeed());
-//        }
     }
 
     public boolean containsRouteWithName(String name) {
         for (int i = 0; i < routeListItems.size(); i++) {
-            if (routeListItems.get(i).getName() == name) {
+            if (routeListItems.get(i).getName().equals(name)) {
                 return true;
             }
         }
@@ -112,7 +107,7 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
     public void addRoute(String name, float distance, String positions, boolean cyclic) {
         RouteListItem item = new RouteListItem();
-        item.setPostions(positions);
+        item.setPositions(positions);
         item.setCyclic(cyclic);
         item.setName(name);
         item.setDistance(distance);
@@ -127,20 +122,3 @@ public class RouteOverviewActivity extends AppCompatActivity {
         return routeListItems;
     }
 }
-
-
-
-// Example routes to be deleted later
-// addRoute("My route", "10 km", "2", "5 km/h");
-//addRoute("Marathon", "42 km", "0", "5 km/h");
-
-
-/*
-        //ADD to database
-        member = new RouteListItem();
-        member.setName("Marathon");
-        member.setDistance("42 km");
-        member.setCompletions("0");
-        member.setAvgSpeed("5 km/h");
-        ref.push().setValue(member);
- */
