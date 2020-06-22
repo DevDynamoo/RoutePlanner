@@ -73,9 +73,7 @@ public class CreateRouteActivity extends FragmentActivity
     private static final String KEY_CAMERA_POSITION = "camera_position";
     private static final String KEY_LOCATION = "location";
 
-    private GoogleMap mMap;
-    ArrayList<LatLng> arrayList = new ArrayList<LatLng>();
-    Polyline line;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,15 +84,10 @@ public class CreateRouteActivity extends FragmentActivity
         }
 
         setContentView(R.layout.activity_create_route);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-
-
         routeLength = new ArrayList<>();
 
-        // Construct a FusedLocationProviderClient
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
-        // Construct a PlacesClient
         Places.initialize(getApplicationContext(), getString(R.string.google_maps_key));
         mPlacesClient = Places.createClient(this);
 
@@ -137,6 +130,7 @@ public class CreateRouteActivity extends FragmentActivity
 
     private void initializeListeners() {
 
+        // Set up checkbox
         cycleCheckBox = findViewById(R.id.checkBox);
         cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
             @Override

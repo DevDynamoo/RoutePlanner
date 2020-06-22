@@ -97,9 +97,12 @@ public class RunRouteActivity extends FragmentActivity
         // Get the current location of the device and set the position of the map.
         getDeviceLocation();
     }
+
     private void generateMarkers() {
         Log.d(TAG, "Whole positions: " + positions);
+
         String[] coordinateArray = positions.split(";");
+
         for (String s : coordinateArray) {
             Log.d(TAG, "Coordinate: " + s);
         }
@@ -227,5 +230,9 @@ public class RunRouteActivity extends FragmentActivity
         } catch (SecurityException e)  {
             Log.e("Exception: %s", e.getMessage());
         }
+    }
+
+    public float getDistance() {
+        return distance;
     }
 }

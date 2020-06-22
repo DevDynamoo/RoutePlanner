@@ -114,11 +114,8 @@ public class RunClockFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
-
-                                //TODO implement code to retrieve correct routeDistance
-
                                 //Distance
-                                distance=parentActivity.distance;
+                                distance = parentActivity.getDistance();
 
                                 //time converted to seconds
                                 time=(int) (currentTimePassed/1000);
@@ -126,10 +123,6 @@ public class RunClockFragment extends Fragment {
                                 //Average speed
                                 speed = (float) (distance / (currentTimePassed/1000.0/60.0/60.0));
                                 float roundedAvgSpeed = (Math.round(speed*100.0f) / 100.0f);
-
-
-
-                                //TODO implement code that saves avgSpeed in database
 
                                 Toast.makeText(parentActivity, "Finished with speed of " + roundedAvgSpeed + "km/h", Toast.LENGTH_LONG).show();
 
