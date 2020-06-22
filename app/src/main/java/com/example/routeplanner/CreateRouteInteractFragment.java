@@ -36,6 +36,8 @@ public class CreateRouteInteractFragment extends Fragment {
 
     private ArrayList<Float> routeLength;
 
+    String pos;
+
     private CreateRouteActivity parentActivity;
 
     public static CreateRouteInteractFragment newInstance() {
@@ -71,7 +73,18 @@ public class CreateRouteInteractFragment extends Fragment {
             public void onClick(View v) {
                 //TODO Implement code that generates a new route and stores it
 
-            }
+                pos="";
+
+                Stack<Marker> markerStack = parentActivity.getMarkerStack();
+
+                    for (Marker m : markerStack) {
+                       pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
+
+                    }
+                    System.out.println(parentActivity.updateCalcLengthText());
+
+
+                }
         });
 
         Button undoMarkerButton = (Button) getView().findViewById(R.id.button_undo_marker);
@@ -135,4 +148,6 @@ public class CreateRouteInteractFragment extends Fragment {
         routeLength.remove(routeLength.size()-1);
         parentActivity.updateCalcLengthText();
     }
+
 }
+
