@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -57,10 +56,13 @@ public class RouteOverviewActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 if (startedForResult) {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, (Parcelable) adapter.getItem(position));
-                    setResult(RESULT_OK, returnIntent);
                     Log.d(TAG, "Item clicked");
+                    Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
+                    returnIntent.putExtra("name", ((RouteListItem) arg0.getItemAtPosition(position)).getName());
+                    returnIntent.putExtra("distance", ((RouteListItem) arg0.getItemAtPosition(position)).getDistance());
+                    returnIntent.putExtra("positions", ((RouteListItem) arg0.getItemAtPosition(position)).getPositions());
+                    returnIntent.putExtra("cyclic", ((RouteListItem) arg0.getItemAtPosition(position)).isCyclic());
+                    setResult(RESULT_OK, returnIntent);
                     finish();
                 } else {
                     Log.d(TAG, "Item not clicked");
