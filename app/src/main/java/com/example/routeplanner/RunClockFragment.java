@@ -13,7 +13,16 @@ import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.HashMap;
 
 public class RunClockFragment extends Fragment {
 
@@ -23,6 +32,26 @@ public class RunClockFragment extends Fragment {
     private boolean timeStarted = false;
     private long currentTimePassed;
     private long finishTime;
+
+
+    //Total stats
+    public int totalTime;
+    public double totalAvrSpeed;
+    public double totalDistance;
+    public int num;
+
+    //New stats to add
+    public int time;
+    public double speed;
+    public double distance;
+
+
+    DatabaseReference refps;
+
+    StatisticsData member;
+    PersonalStats personalStats;
+
+    String ID;
 
     private RunRouteActivity parentActivity;
 
@@ -85,16 +114,67 @@ public class RunClockFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
 
+
                                 //TODO implement code to retrieve correct routeDistance
 
-                                double routeDistance = 10.0;
-                                double avgSpeed = routeDistance / (currentTimePassed/1000.0/60.0/60.0);
-                                double roundedAvgSpeed =  Math.round(avgSpeed*100) / 100.0;
+                                //Distance
+                                distance = 10.0;
+
+                                //time converted to seconds
+                                time=(int) (currentTimePassed/1000);
+                                System.out.println(time);
+
+                                //Average speed
+                                speed = distance / (currentTimePassed/1000.0/60.0/60.0);
+                                double roundedAvgSpeed =  Math.round(speed*100) / 100.0;
+
+                                System.out.println(speed);
+
+
 
                                 //TODO implement code that saves avgSpeed in database
 
                                 Toast.makeText(parentActivity, "Finished with speed of " + roundedAvgSpeed + "km/h", Toast.LENGTH_LONG).show();
 
+
+                                /* Updating statistics */
+
+                                //setting reference
+                                refps= FirebaseDatabase.getInstance().getReference().child("PersonalStats");
+                                ID="-MAD-Y5CEBd4OA0yp7g4";
+                                //getting current values, calcutating new stats & updating it
+                                refps.child(ID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                        totalTime=dataSnapshot.getValue(PersonalStats.class).getTime()+time;
+                                        totalAvrSpeed=dataSnapshot.getValue(PersonalStats.class).getTotalspeed()+speed;
+                                        totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance()+distance;
+                                        num=dataSnapshot.getValue(PersonalStats.class).getNum()+1;
+
+                                        //updating values
+                                        HashMap hashMap = new HashMap();
+
+                                        hashMap.put("num",num);
+                                        refps.child(ID).updateChildren(hashMap);
+
+                                        hashMap.put("time",totalTime);
+                                        refps.child(ID).updateChildren(hashMap);
+
+                                        hashMap.put("totaldistance",totalDistance);
+                                        refps.child(ID).updateChildren(hashMap);
+
+                                        hashMap.put("totalspeed",totalAvrSpeed);
+                                        refps.child(ID).updateChildren(hashMap);
+
+                                    }
+
+                                    @Override
+                                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                                    }
+                                });
+
+                                //Go to main activity
                                 Intent intent = new Intent(parentActivity, MainActivity.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                                 startActivity(intent);
@@ -111,4 +191,19 @@ public class RunClockFragment extends Fragment {
             }
         });
     }
+
 }
+
+ /*
+        //Create member
+        member= new StatisticsData();
+        member.setAvrSpeed(distance);
+        member.setDistance(speed);
+        member.setTime(time);
+
+        //Add member
+        ref.push().setValue(member);
+        Toast.makeText(PrepareRunActivity.this,"Data Added",Toast.LENGTH_LONG).show();
+*/
+
+
