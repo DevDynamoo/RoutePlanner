@@ -17,4 +17,6 @@
     <string name="totaldistance">TotalDistance</string>
     <string name="overall_average_speed">Overall Average Speed</string>
     <string name="totaltime">TotalTime</string>
+    <string name="button_choose_route">Choose a route</string>
+    <string name="button_run_route">Run route</string>
 </resources>

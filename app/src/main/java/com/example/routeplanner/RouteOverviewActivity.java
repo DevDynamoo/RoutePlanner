@@ -3,8 +3,11 @@ package com.example.routeplanner;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.google.firebase.database.DatabaseReference;
@@ -20,13 +23,24 @@ public class RouteOverviewActivity extends AppCompatActivity {
     private static final String TAG = "RouteOverview";
     private static ArrayList<RouteListItem> routeListItems = new ArrayList<>();
     private FirebaseDatabase appDatabase;
+    public static final String EXTRA_MESSAGE_ROUTE_OVERVIEW = "com.example.routeplanner.GET_LIST_ITEM";
     DatabaseReference ref;
     RouteListItem member;
+    boolean startedForResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_overview_activity);
+
+        if (savedInstanceState == null) {
+            Bundle extras = getIntent().getExtras();
+            if(extras != null) {
+                startedForResult = extras.getBoolean(EXTRA_MESSAGE_ROUTE_OVERVIEW);
+            }
+        } else {
+            startedForResult = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_OVERVIEW);
+        }
 
         Log.i(TAG, "onCreate called");
 
@@ -51,9 +65,23 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
                 }
                 ListView listView = (ListView) findViewById(R.id.listView);
+
                 RouteListAdapter adapter = new RouteListAdapter
                         (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
                 listView.setAdapter(adapter);
+                listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                        if (startedForResult) {
+                            Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
+                            returnIntent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, arg1);
+                            setResult(RESULT_OK, returnIntent);
+                            Log.d(TAG, "Item clicked");
+                        } else {
+                            Log.d(TAG, "Item not clicked");
+                        }
+                    }
+                });
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
