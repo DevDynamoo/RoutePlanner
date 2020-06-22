@@ -48,6 +48,7 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
         //Get reference
         rootRef= FirebaseDatabase.getInstance().getReference().child("PersonalStats");
         ID="-MAD-Y5CEBd4OA0yp7g4";
+
         //Setting textview
         Display_distance = findViewById(R.id.displaydistance);
         Display_time = findViewById(R.id.displaytime);
@@ -64,8 +65,6 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
                      totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
 
                      //Calculating statistics
-
-
                      //Viewing staticstics
                      Display_time.setText("Total Time: "+totalTime);
                      Display_distance.setText("Total distance: "+totalDistance);
@@ -77,10 +76,6 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
 
                  }
              });
-
-
-
-
     }
 
 
@@ -89,8 +84,6 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
             return (total / (double) num );
 
     }
-
-
 }
 
 
