@@ -20,6 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,11 +64,18 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
                      AvrSpeed=Calspeed(dataSnapshot.getValue(PersonalStats.class).getNum(),dataSnapshot.getValue(PersonalStats.class).getTotalspeed());
                      totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
 
-                     //Calculating statistics
+                     //formating statistics
+                     DecimalFormat df = new DecimalFormat("#.00");
+
                      //Viewing staticstics
-                     Display_time.setText("Total Time:\n"+totalTime);
-                     Display_distance.setText("Total distance:\n"+totalDistance);
-                     Display_avrspeed.setText("Average speed:\n"+AvrSpeed);
+                     if (totalTime<60){
+                         Display_time.setText("Total Time:\n"+totalTime+" s");
+                     }
+                     else {
+                         Display_time.setText("Total Time:\n"+totalTime/60+" min");
+                     }
+                     Display_distance.setText("Total distance:\n"+df.format(totalDistance)+" km");
+                     Display_avrspeed.setText("Average speed:\n"+df.format(AvrSpeed)+" km/h");
                  }
 
                  @Override
