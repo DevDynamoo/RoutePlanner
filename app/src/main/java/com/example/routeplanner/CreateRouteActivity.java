@@ -432,6 +432,7 @@ public class CreateRouteActivity extends FragmentActivity
     }
 
     public String getRouteName() {
-       return ((CreateRouteTitleFragment) getFragmentManager().findFragmentById(R.id.route_title_fragment)).getRouteName();
+       return ((CreateRouteTitleFragment) getFragmentManager().findFragmentById(R.id.route_title_fragment))
+               .getRouteName();
     }
 }

@@ -1,5 +1,6 @@
 package com.example.routeplanner;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.Marker;
@@ -47,7 +49,6 @@ public class CreateRouteInteractFragment extends Fragment {
     DatabaseReference ref;
     RouteListItem member;
 
-
     private CreateRouteActivity parentActivity;
 
     public static CreateRouteInteractFragment newInstance() {
@@ -59,7 +60,6 @@ public class CreateRouteInteractFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
     }
 
     @Override
@@ -68,15 +68,16 @@ public class CreateRouteInteractFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_create_route_interact, container, false);
     }
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        //reference to database
-        ref= FirebaseDatabase.getInstance().getReference().child("RouteListItem");
+        // Reference to database
+        ref = FirebaseDatabase.getInstance().getReference().child("RouteListItem");
+
         //New routelistitem
         member = new RouteListItem();
-
 
         mTextViewCalcLength = (TextView) getView().findViewById(R.id.textView_calc_length);
         mTextViewCalcLength.setText("0.0 km");
@@ -89,12 +90,12 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Implemented: code that generates a new route and stores it
-                pos="";
                 name = parentActivity.getRouteName();
 
                 distance = parentActivity.updateCalcLengthText();
 
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
+
                 for (Marker m: markerStack) {
                     pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
                 }
@@ -107,6 +108,10 @@ public class CreateRouteInteractFragment extends Fragment {
                 member.setName(name);
                 ref.push().setValue(member);
 
+                Toast.makeText(parentActivity, "Route created", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(parentActivity, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
             }
         });
 
