@@ -90,6 +90,7 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //Implemented: code that generates a new route and stores it
+                pos="";
                 name = parentActivity.getRouteName();
 
                 distance = parentActivity.updateCalcLengthText();
