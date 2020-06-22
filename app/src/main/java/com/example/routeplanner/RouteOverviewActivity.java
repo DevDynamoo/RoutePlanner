@@ -76,7 +76,7 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
         //Setting reference
         FirebaseDatabase db = FirebaseDatabase.getInstance();
-        DatabaseReference ref = db.getReference("RouteListItem");
+        DatabaseReference ref = db.getReference().child("RouteListItem");
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

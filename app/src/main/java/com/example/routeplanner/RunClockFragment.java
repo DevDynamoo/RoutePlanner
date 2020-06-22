@@ -130,12 +130,9 @@ public class RunClockFragment extends Fragment {
 
                                 System.out.println(speed);
 
-
-
                                 //TODO implement code that saves avgSpeed in database
 
                                 Toast.makeText(parentActivity, "Finished with speed of " + roundedAvgSpeed + "km/h", Toast.LENGTH_LONG).show();
-
 
                                 /* Updating statistics */
 

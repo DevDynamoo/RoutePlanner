@@ -15,7 +15,6 @@ public class RouteListItem {
         this.name = name;
     }
 
-
     public float getDistance() {
         return distance;
     }
