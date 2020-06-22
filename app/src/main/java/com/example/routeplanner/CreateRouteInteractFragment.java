@@ -14,7 +14,6 @@ import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -102,7 +101,7 @@ public class CreateRouteInteractFragment extends Fragment {
 
                 isCyclic = parentActivity.getCycleCheckBox().isChecked();
 
-                member.setPostions(pos);
+                member.setPositions(pos);
                 member.setCyclic(isCyclic);
                 member.setDistance(distance);
                 member.setName(name);

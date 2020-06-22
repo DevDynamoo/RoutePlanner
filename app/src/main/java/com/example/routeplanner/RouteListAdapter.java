@@ -43,7 +43,7 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
         tvTitle.setText(name);
         tvDistance.setText("Distance: " + distance);
-        tvCyclic.setText("Is Cyclic? " + getItem(position).isCyclic());
+        tvCyclic.setText("Cyclic? : " + getItem(position).isCyclic());
 
         return convertView;
     }

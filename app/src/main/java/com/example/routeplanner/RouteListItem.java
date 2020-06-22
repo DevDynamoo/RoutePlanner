@@ -1,15 +1,10 @@
 package com.example.routeplanner;
 
-import com.google.android.gms.maps.model.Marker;
-
-import java.io.Serializable;
-import java.util.Stack;
-
-public class RouteListItem implements Serializable {
+public class RouteListItem {
 
     private String name;
     private float distance;
-    private String postions;
+    private String positions;
     private boolean cyclic;
 
     public String getName() {
@@ -29,12 +24,12 @@ public class RouteListItem implements Serializable {
         this.distance = distance;
     }
 
-    public String getPostions() {
-        return postions;
+    public String getPositions() {
+        return positions;
     }
 
-    public void setPostions(String postions) {
-        this.postions = postions;
+    public void setPositions(String positions) {
+        this.positions = positions;
     }
 
     public boolean isCyclic() {
