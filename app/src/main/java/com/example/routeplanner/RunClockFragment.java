@@ -79,7 +79,7 @@ public class RunClockFragment extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finishButton.setEnabled(true);
+                finishButton.setEnabled(false);
                 if (!timeStarted) {
                     chronometer.setBase(SystemClock.elapsedRealtime() - currentTimePassed);
                     chronometer.start();
@@ -96,6 +96,8 @@ public class RunClockFragment extends Fragment {
                     currentTimePassed = SystemClock.elapsedRealtime() - chronometer.getBase();
                     chronometer.stop();
                     timeStarted = false;
+                    finishButton.setEnabled(true);
+
                 } else {
                     chronometer.setBase(SystemClock.elapsedRealtime());
                     currentTimePassed = 0;
