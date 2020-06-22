@@ -61,7 +61,7 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
 
                      //Getting info to stats
                      totalTime=dataSnapshot.getValue(PersonalStats.class).getTime();
-                     AvrSpeed=Calspeed(dataSnapshot.getValue(PersonalStats.class).getNum(),dataSnapshot.getValue(PersonalStats.class).getTotalspeed());
+                     AvrSpeed=dataSnapshot.getValue(PersonalStats.class).getTotalspeed()/dataSnapshot.getValue(PersonalStats.class).getNum();
                      totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
 
                      //formating statistics
@@ -85,12 +85,6 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
              });
     }
 
-
-    private double Calspeed(int num, double total )  {
-
-            return (total / (double) num );
-
-    }
 }
 
 
