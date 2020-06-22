@@ -83,10 +83,10 @@ public class PrepareRunActivity extends AppCompatActivity {
             Log.d("GetListItemTest", "Name and distance: " + data.getStringExtra("name") + " " +  data.getStringExtra("distance"));
             routeSelected = true;
             tvRouteName.setText(routeName = data.getStringExtra("name"));
-            if (!data.getStringExtra("distance").equals("")) {
-                tvRouteDistance.setText(routeDistance = data.getStringExtra("distance"));
-            } else {
+            if (data.getStringExtra("distance") == null) {
                 tvRouteDistance.setText("Distance not shown");
+            } else {
+                tvRouteDistance.setText(routeDistance = data.getStringExtra("distance"));
             }
             routePositions = data.getStringExtra("positions");
             routeIsCyclic = data.getBooleanExtra("cyclic", false);

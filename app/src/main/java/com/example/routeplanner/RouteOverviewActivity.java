@@ -60,7 +60,7 @@ public class RouteOverviewActivity extends AppCompatActivity {
                     Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
                     returnIntent.putExtra("name", ((RouteListItem) arg0.getItemAtPosition(position)).getName());
                     returnIntent.putExtra("distance", ((RouteListItem) arg0.getItemAtPosition(position)).getDistance());
-                    returnIntent.putExtra("positions", ((RouteListItem) arg0.getItemAtPosition(position)).getPostions());
+                    returnIntent.putExtra("positions", ((RouteListItem) arg0.getItemAtPosition(position)).getPositions());
                     returnIntent.putExtra("cyclic", ((RouteListItem) arg0.getItemAtPosition(position)).isCyclic());
                     setResult(RESULT_OK, returnIntent);
                     finish();
