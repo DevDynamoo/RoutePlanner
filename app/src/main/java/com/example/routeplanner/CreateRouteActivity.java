@@ -88,26 +88,6 @@ public class CreateRouteActivity extends FragmentActivity
         setContentView(R.layout.activity_create_route);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
 
-        cycleCheckBox = findViewById(R.id.checkBox);
-        cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (compoundButton.isChecked() && markerStack.size() > 1) {
-                    if (markerStack.size() == 2) {
-                        routeLength.add(0f);
-                    } else {
-                        float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
-                        routeLength.add(cycleDist);
-                    }
-                    updateCalcLengthText();
-                    createCycleLineBetweenFirstAndLast();
-                } else if (markerStack.size() > 1) {
-                    routeLength.remove(routeLength.size()-1);
-                    updateCalcLengthText();
-                    cycleLine.remove();
-                }
-            }
-        });
 
         routeLength = new ArrayList<>();
 
@@ -138,10 +118,7 @@ public class CreateRouteActivity extends FragmentActivity
                 .width(10)
                 .color(Color.RED));
     }
-    /*
-     * Method taken from Maps SDK for Android - Documentation
-     * https://developers.google.com/maps/documentation/android-sdk/intro
-     */
+
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
@@ -159,6 +136,23 @@ public class CreateRouteActivity extends FragmentActivity
     }
 
     private void initializeListeners() {
+
+        cycleCheckBox = findViewById(R.id.checkBox);
+        cycleCheckBox.setOnCheckedChangeListener(new CheckBox.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (compoundButton.isChecked() && markerStack.size() > 1) {
+                    float cycleDist = getDistanceBetweenMarkers(markerStack.get(0), markerStack.peek());
+                    routeLength.add(cycleDist);
+                    updateCalcLengthText();
+                    createCycleLineBetweenFirstAndLast();
+                } else if (markerStack.size() > 1) {
+                    routeLength.remove(routeLength.size()-1);
+                    updateCalcLengthText();
+                    cycleLine.remove();
+                }
+            }
+        });
 
         // Sets a listener on the map to handle the event of
         // the user long pressing anywhere on the map that is not a marker
@@ -189,7 +183,6 @@ public class CreateRouteActivity extends FragmentActivity
                 Toast.makeText(getApplicationContext(), "New marker added" ,Toast.LENGTH_SHORT).show();
 
                 // Push current position and marker on top of respective stacks
-                Log.d(TAG, "Size of stack: " + markerStack.size());
                 if (markerStack.size() >= 1) {
                     float result = getDistanceBetweenMarkers(newMarker, markerStack.peek());
 
@@ -253,10 +246,7 @@ public class CreateRouteActivity extends FragmentActivity
             }
         });
     }
-    /*
-     * Method taken from Maps SDK for Android - Documentation
-     * https://developers.google.com/maps/documentation/android-sdk/intro
-     */
+
     public boolean onMarkerClick(final Marker marker) {
         // Center camera on marker clicked and zoom to default zoom level
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));

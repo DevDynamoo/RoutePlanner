@@ -166,11 +166,12 @@ public class CreateRouteInteractFragment extends Fragment {
                             markerStack.pop().remove();
                             polylineStack.pop().remove();
                             removeDistance();
+                            markerStack.peek().setDraggable(true);
                         }
                     }
+                } else if (markerStack.size() == 1) {
+                    markerStack.pop().remove();
                 }
-                Log.i("Routes", "polyLineStack: "+polylineStack.size());
-                Log.i("Routes", "markerStack: " + markerStack.size());
             }
         });
 
