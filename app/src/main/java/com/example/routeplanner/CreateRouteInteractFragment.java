@@ -69,7 +69,7 @@ public class CreateRouteInteractFragment extends Fragment {
         mCreateNewRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO Implement code that generates a new route and stores it
+
                 String name = parentActivity.getRouteName();
 
                 int distance = 0;
@@ -81,7 +81,7 @@ public class CreateRouteInteractFragment extends Fragment {
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
 
                 boolean isCyclic = parentActivity.getCycleCheckBox().isChecked();
-
+                //TODO Implement code that generates a new route and stores it
 
             }
         });

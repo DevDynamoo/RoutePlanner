@@ -138,7 +138,10 @@ public class CreateRouteActivity extends FragmentActivity
                 .width(10)
                 .color(Color.RED));
     }
-
+    /*
+     * Method taken from Maps SDK for Android - Documentation
+     * https://developers.google.com/maps/documentation/android-sdk/intro
+     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
@@ -250,7 +253,10 @@ public class CreateRouteActivity extends FragmentActivity
             }
         });
     }
-
+    /*
+     * Method taken from Maps SDK for Android - Documentation
+     * https://developers.google.com/maps/documentation/android-sdk/intro
+     */
     public boolean onMarkerClick(final Marker marker) {
         // Center camera on marker clicked and zoom to default zoom level
         map.moveCamera(CameraUpdateFactory.newLatLngZoom(marker.getPosition(), DEFAULT_ZOOM));
@@ -261,7 +267,10 @@ public class CreateRouteActivity extends FragmentActivity
         // and prevent any extra UI menus to appear
         return true;
     }
-
+    /*
+     * Method taken from Maps SDK for Android - Documentation
+     * https://developers.google.com/maps/documentation/android-sdk/intro
+     */
     private void getLocationPermission() {
         /*
          * Request location permission, so that we can get the location of the
@@ -278,7 +287,10 @@ public class CreateRouteActivity extends FragmentActivity
                     PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION);
         }
     }
-
+    /*
+     * Method taken from Maps SDK for Android - Documentation
+     * https://developers.google.com/maps/documentation/android-sdk/intro
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -295,7 +307,10 @@ public class CreateRouteActivity extends FragmentActivity
         }
         updateLocationUI();
     }
-
+    /*
+    * Method taken from Maps SDK for Android - Documentation
+    * https://developers.google.com/maps/documentation/android-sdk/intro
+    */
     private void getDeviceLocation() {
         /*
          * Get the best and most recent location of the device, which may be null in rare
@@ -329,7 +344,10 @@ public class CreateRouteActivity extends FragmentActivity
             Log.e("Exception: %s", e.getMessage(), e);
         }
     }
-
+    /*
+     * Method taken from Maps SDK for Android - Documentation
+     * https://developers.google.com/maps/documentation/android-sdk/intro
+     */
     private void updateLocationUI() {
         if (map == null) {
             return;
