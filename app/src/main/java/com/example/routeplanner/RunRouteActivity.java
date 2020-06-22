@@ -89,16 +89,17 @@ public class RunRouteActivity extends FragmentActivity
         getDeviceLocation();
     }
     private void generateMarkers() {
-        String[] coordinateArray = positions.split(",");
+        Log.d(TAG, "Whole positions: " + positions);
+        String[] coordinateArray = positions.split(";");
         for (String s : coordinateArray) {
             Log.d(TAG, "Coordinate: " + s);
         }
         Stack<Marker> markerStack = new Stack<>();
-        for (int index = 0; index < coordinateArray.length; index += 2) {
+        for (int index = 0; index < coordinateArray.length; index ++) {
             MarkerOptions newMarkerOptions = new MarkerOptions()
                     .position(new LatLng(
-                            Double.parseDouble(coordinateArray[index]),
-                            Double.parseDouble(coordinateArray[index+1]) ))
+                            Double.parseDouble(coordinateArray[index].split(",")[0]),
+                            Double.parseDouble(coordinateArray[index].split(",")[1]) ))
                     .draggable(false);
             Marker newMarker = map.addMarker(newMarkerOptions);
 
