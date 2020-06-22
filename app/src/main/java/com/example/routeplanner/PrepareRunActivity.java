@@ -27,6 +27,8 @@ public class PrepareRunActivity extends AppCompatActivity {
     static private final int GET_LIST_ITEM_REQUEST_CODE = 1;
     static private final int START_ROUTE_RUN_REQUEST_CODE = 2;
     public static final String EXTRA_MESSAGE_ROUTE_OVERVIEW = "com.example.routeplanner.GET_LIST_ITEM";
+    public static final String EXTRA_MESSAGE_ROUTE_IS_CYCLIC = "com.example.routeplanner.IS_CYCLIC";
+    public static final String EXTRA_MESSAGE_ROUTE_POSITIONS = "com.example.routeplanner.ROUTE_POSITIONS";
     private boolean routeSelected = false;
 
     private String routeName = "";
@@ -51,10 +53,9 @@ public class PrepareRunActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (routeSelected) {
                     Intent intent = new Intent(PrepareRunActivity.this, RunRouteActivity.class);
-                    intent.putExtra("name",routeName)
-                            .putExtra("distance",routeName)
-                            .putExtra("positions",routePositions)
-                            .putExtra("cyclic",routeIsCyclic);
+                    intent
+                            .putExtra(EXTRA_MESSAGE_ROUTE_POSITIONS,routePositions)
+                            .putExtra(EXTRA_MESSAGE_ROUTE_IS_CYCLIC,routeIsCyclic);
                     startActivityForResult(intent, START_ROUTE_RUN_REQUEST_CODE);
                 } else {
                     Toast.makeText(PrepareRunActivity.this, "Please select a route first", Toast.LENGTH_SHORT).show();
@@ -84,7 +85,7 @@ public class PrepareRunActivity extends AppCompatActivity {
             routeSelected = true;
             tvRouteName.setText(routeName = data.getStringExtra("name"));
             if (data.getStringExtra("distance") == null) {
-                tvRouteDistance.setText("Distance not shown");
+                tvRouteDistance.setText("Distance not available");
             } else {
                 tvRouteDistance.setText(routeDistance = data.getStringExtra("distance"));
             }
