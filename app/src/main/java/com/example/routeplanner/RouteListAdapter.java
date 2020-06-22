@@ -7,9 +7,12 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.model.Marker;
+
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Stack;
 
 public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
@@ -24,9 +27,8 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
     public View getView(int position, View convertView, ViewGroup parent) {
         String name = getItem(position).getName();
-        String distance = getItem(position).getDistance();
-        String completions = getItem(position).getCompletions();
-        String avgSpeed = getItem(position).getAvgSpeed();
+        float distance = getItem(position).getDistance();
+        boolean cyclic = getItem(position).isCyclic();
 
         //RouteListItem item = new RouteListItem(name, distance, completions, avgSpeed);
         LayoutInflater inflater = LayoutInflater.from(mContext);
@@ -37,13 +39,11 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
         TextView tvTitle = (TextView) convertView.findViewById(R.id.RouteMainTitle);
         TextView tvDistance = (TextView) convertView.findViewById(R.id.RouteDistance);
-        TextView tvCompletions = (TextView) convertView.findViewById(R.id.RouteCompletions);
-        TextView tvAvgSpeed = (TextView) convertView.findViewById(R.id.RouteAvgSpeed);
+        TextView tvCyclic = (TextView) convertView.findViewById(R.id.RouteCompletions);
 
         tvTitle.setText(name);
         tvDistance.setText("Distance: " + distance);
-        tvCompletions.setText("Number of times run: " + completions);
-        tvAvgSpeed.setText("Average speed: " + avgSpeed);
+        tvCyclic.setText("Is Cyclic? " + getItem(position).isCyclic());
 
         return convertView;
     }
