@@ -83,13 +83,19 @@ public class PrepareRunActivity extends AppCompatActivity {
             requestCode == GET_LIST_ITEM_REQUEST_CODE) {
             Log.d("GetListItemTest", "Name and distance: " + data.getStringExtra("name") + " " +  data.getStringExtra("distance"));
             routeSelected = true;
+
             tvRouteName.setText(routeName = data.getStringExtra("name"));
-            if (data.getStringExtra("distance") == null) {
+
+            float distance = data.getFloatExtra("distance",-1);
+            float num = (float) Math.round(distance*100)/100;
+            if (num < 0) {
                 tvRouteDistance.setText("Distance not available");
             } else {
-                tvRouteDistance.setText(routeDistance = data.getStringExtra("distance"));
+                tvRouteDistance.setText(num + " km");
             }
+
             routePositions = data.getStringExtra("positions");
+
             routeIsCyclic = data.getBooleanExtra("cyclic", false);
 
         } else if (resultCode == Activity.RESULT_OK &&
