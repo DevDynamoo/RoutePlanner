@@ -29,10 +29,12 @@ public class PrepareRunActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE_ROUTE_OVERVIEW = "com.example.routeplanner.GET_LIST_ITEM";
     public static final String EXTRA_MESSAGE_ROUTE_IS_CYCLIC = "com.example.routeplanner.IS_CYCLIC";
     public static final String EXTRA_MESSAGE_ROUTE_POSITIONS = "com.example.routeplanner.ROUTE_POSITIONS";
+    public static final String EXTRA_MESSAGE_ROUTE_DISTANCE = "com.example.routeplanner.ROUTE_DISTANCE";
+
     private boolean routeSelected = false;
 
     private String routeName = "";
-    private String routeDistance = "";
+    private float routeDistance ;
     private String routePositions = "";
     private boolean routeIsCyclic;
 
@@ -55,7 +57,8 @@ public class PrepareRunActivity extends AppCompatActivity {
                     Intent intent = new Intent(PrepareRunActivity.this, RunRouteActivity.class);
                     intent
                             .putExtra(EXTRA_MESSAGE_ROUTE_POSITIONS,routePositions)
-                            .putExtra(EXTRA_MESSAGE_ROUTE_IS_CYCLIC,routeIsCyclic);
+                            .putExtra(EXTRA_MESSAGE_ROUTE_IS_CYCLIC,routeIsCyclic)
+                            .putExtra(EXTRA_MESSAGE_ROUTE_DISTANCE,routeDistance);
                     startActivityForResult(intent, START_ROUTE_RUN_REQUEST_CODE);
                 } else {
                     Toast.makeText(PrepareRunActivity.this, "Please select a route first", Toast.LENGTH_SHORT).show();
@@ -86,8 +89,8 @@ public class PrepareRunActivity extends AppCompatActivity {
 
             tvRouteName.setText(routeName = data.getStringExtra("name"));
 
-            float distance = data.getFloatExtra("distance",-1);
-            float num = (float) Math.round(distance*100)/100;
+            routeDistance = data.getFloatExtra("distance",-1);
+            float num = (float) Math.round(routeDistance*100)/100;
             if (num < 0) {
                 tvRouteDistance.setText("Distance not available");
             } else {

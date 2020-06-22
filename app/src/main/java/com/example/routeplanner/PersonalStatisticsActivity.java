@@ -27,7 +27,6 @@ import java.util.List;
 
 public class PersonalStatisticsActivity extends AppCompatActivity {
 
-    public static ArrayList<StatisticsData> statisticsDataItems = new ArrayList<>();
 
     DatabaseReference rootRef;
     String ID;
@@ -66,9 +65,9 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
 
                      //Calculating statistics
                      //Viewing staticstics
-                     Display_time.setText("Total Time: "+totalTime);
-                     Display_distance.setText("Total distance: "+totalDistance);
-                     Display_avrspeed.setText("Overall Average speed:"+AvrSpeed);
+                     Display_time.setText("Total Time:\n"+totalTime);
+                     Display_distance.setText("Total distance:\n"+totalDistance);
+                     Display_avrspeed.setText("Average speed:\n"+AvrSpeed);
                  }
 
                  @Override
@@ -88,15 +87,3 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
 
 
 
-
-//Delete
-// deleteItem("");
-
-/*
-  private void deleteItem(String key) {
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference().child("StatisticsData").child(key);
-        ref.removeValue();
-        Toast.makeText(this,"Data deleted",Toast.LENGTH_LONG).show();
-
-    }
- */
