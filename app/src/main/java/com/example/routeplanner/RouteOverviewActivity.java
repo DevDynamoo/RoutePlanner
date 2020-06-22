@@ -36,6 +36,8 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
         //Setting reference
         ref= FirebaseDatabase.getInstance().getReference().child("RouteListItem");
+
+
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -43,14 +45,15 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
                     addRoute(ds.getValue(RouteListItem.class).getName(),
                             ds.getValue(RouteListItem.class).getDistance(),
-                            ds.getValue(RouteListItem.class).getCompletions(),
-                            ds.getValue(RouteListItem.class).getAvgSpeed());
+                            ds.getValue(RouteListItem.class).getPostions(),
+                            ds.getValue(RouteListItem.class).isCyclic());
 
-                    ListView listView = (ListView) findViewById(R.id.listView);
-                    RouteListAdapter adapter = new RouteListAdapter
-                            (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
-                    listView.setAdapter(adapter);
+
                 }
+                ListView listView = (ListView) findViewById(R.id.listView);
+                RouteListAdapter adapter = new RouteListAdapter
+                        (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
+                listView.setAdapter(adapter);
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) { }
@@ -79,10 +82,10 @@ public class RouteOverviewActivity extends AppCompatActivity {
         return false;
     }
 
-    public void addRoute(String name, String distance, String completions, String avgSpeed) {
+    public void addRoute(String name, float distance, String positions, boolean cyclic) {
         RouteListItem item = new RouteListItem();
-        item.setAvgSpeed(avgSpeed);
-        item.setCompletions(completions);
+        item.setPostions(positions);
+        item.setCyclic(cyclic);
         item.setName(name);
         item.setDistance(distance);
         routeListItems.add(item);

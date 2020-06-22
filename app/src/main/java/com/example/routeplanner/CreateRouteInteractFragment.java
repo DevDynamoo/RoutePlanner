@@ -18,6 +18,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.Stack;
@@ -35,6 +37,17 @@ public class CreateRouteInteractFragment extends Fragment {
     private GoogleMap map;
 
     private ArrayList<Float> routeLength;
+
+    //Info to save to database
+    String pos;
+    float distance;
+    String name;
+    boolean isCyclic;
+
+    //Database
+    DatabaseReference ref;
+    RouteListItem member;
+
 
     private CreateRouteActivity parentActivity;
 
@@ -59,6 +72,13 @@ public class CreateRouteInteractFragment extends Fragment {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        //reference to database
+        ref= FirebaseDatabase.getInstance().getReference().child("RouteListItem");
+        //New routelistitem
+        member = new RouteListItem();
+
+
         mTextViewCalcLength = (TextView) getView().findViewById(R.id.textView_calc_length);
         mTextViewCalcLength.setText("0.0 km");
 
@@ -69,19 +89,24 @@ public class CreateRouteInteractFragment extends Fragment {
         mCreateNewRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Implemented: code that generates a new route and stores it
+                pos="";
+                name = parentActivity.getRouteName();
 
-                String name = parentActivity.getRouteName();
-
-                int distance = 0;
-                ArrayList<Float> routeLength = parentActivity.getRouteLength();
-                for (int index = 0; index < routeLength.size(); index++){
-                    distance += routeLength.get(index);
-                }
+                distance = parentActivity.updateCalcLengthText();
 
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
+                for (Marker m: markerStack) {
+                    pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
+                }
 
-                boolean isCyclic = parentActivity.getCycleCheckBox().isChecked();
-                //TODO Implement code that generates a new route and stores it
+                isCyclic = parentActivity.getCycleCheckBox().isChecked();
+
+                member.setPostions(pos);
+                member.setCyclic(isCyclic);
+                member.setDistance(distance);
+                member.setName(name);
+                ref.push().setValue(member);
 
             }
         });

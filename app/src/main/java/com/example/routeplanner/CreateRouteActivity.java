@@ -376,7 +376,7 @@ public class CreateRouteActivity extends FragmentActivity
         super.onSaveInstanceState(outState);
     }
 
-    public void updateCalcLengthText() {
+    public float updateCalcLengthText() {
         TextView calcLength = (TextView) findViewById(R.id.textView_calc_length);
         float totalRouteLength = 0;
         for (int i = 0; i < routeLength.size(); i++) {
@@ -386,6 +386,7 @@ public class CreateRouteActivity extends FragmentActivity
         float distance = totalRouteLength/1000;
         float num = (float) Math.round(distance*100)/100;
         calcLength.setText(num + " km");
+        return num;
     }
 
     protected float getDistanceBetweenMarkers(Marker A, Marker B) {
