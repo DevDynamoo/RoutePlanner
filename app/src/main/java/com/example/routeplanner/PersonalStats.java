@@ -1,10 +1,18 @@
 package com.example.routeplanner;
 
 public class PersonalStats {
-        public double totalspeed;
+        public float totalspeed;
         public int num;
-        public double totaldistance;
+        public float totaldistance;
         public int time;
+
+    public float getTotalspeed() {
+        return totalspeed;
+    }
+
+    public void setTotalspeed(float totalspeed) {
+        this.totalspeed = totalspeed;
+    }
 
     public int getNum() {
         return num;
@@ -14,19 +22,11 @@ public class PersonalStats {
         this.num = num;
     }
 
-    public double getTotalspeed() {
-        return totalspeed;
-    }
-
-    public void setTotalspeed(double totalspeed) {
-        this.totalspeed = totalspeed;
-    }
-
-    public double getTotaldistance() {
+    public float getTotaldistance() {
         return totaldistance;
     }
 
-    public void setTotaldistance(double totaldistance) {
+    public void setTotaldistance(float totaldistance) {
         this.totaldistance = totaldistance;
     }
 

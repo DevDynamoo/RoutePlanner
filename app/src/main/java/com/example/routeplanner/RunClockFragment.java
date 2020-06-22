@@ -36,19 +36,18 @@ public class RunClockFragment extends Fragment {
 
     //Total stats
     public int totalTime;
-    public double totalAvrSpeed;
-    public double totalDistance;
+    public float totalAvrSpeed;
+    public float totalDistance;
     public int num;
 
     //New stats to add
     public int time;
-    public double speed;
-    public double distance;
+    public float speed;
+    public float distance;
 
 
     DatabaseReference refps;
 
-    StatisticsData member;
     PersonalStats personalStats;
 
     String ID;
@@ -85,6 +84,7 @@ public class RunClockFragment extends Fragment {
                     chronometer.setBase(SystemClock.elapsedRealtime() - currentTimePassed);
                     chronometer.start();
                     timeStarted = true;
+                    System.out.println(parentActivity.distance);
                 }
             }
         });
@@ -118,17 +118,16 @@ public class RunClockFragment extends Fragment {
                                 //TODO implement code to retrieve correct routeDistance
 
                                 //Distance
-                                distance = 10.0;
+                                distance=parentActivity.distance;
 
                                 //time converted to seconds
                                 time=(int) (currentTimePassed/1000);
-                                System.out.println(time);
 
                                 //Average speed
-                                speed = distance / (currentTimePassed/1000.0/60.0/60.0);
-                                double roundedAvgSpeed =  Math.round(speed*100) / 100.0;
+                                speed = (float) (distance / (currentTimePassed/1000.0/60.0/60.0));
+                                float roundedAvgSpeed = (Math.round(speed*100.0f) / 100.0f);
 
-                                System.out.println(speed);
+
 
                                 //TODO implement code that saves avgSpeed in database
 
@@ -190,17 +189,4 @@ public class RunClockFragment extends Fragment {
     }
 
 }
-
- /*
-        //Create member
-        member= new StatisticsData();
-        member.setAvrSpeed(distance);
-        member.setDistance(speed);
-        member.setTime(time);
-
-        //Add member
-        ref.push().setValue(member);
-        Toast.makeText(PrepareRunActivity.this,"Data Added",Toast.LENGTH_LONG).show();
-*/
-
 

@@ -38,6 +38,8 @@ public class RunRouteActivity extends FragmentActivity
     private static final String TAG = RunRouteActivity.class.getSimpleName();
     public static final String EXTRA_MESSAGE_ROUTE_IS_CYCLIC = "com.example.routeplanner.IS_CYCLIC";
     public static final String EXTRA_MESSAGE_ROUTE_POSITIONS = "com.example.routeplanner.ROUTE_POSITIONS";
+    public static final String EXTRA_MESSAGE_ROUTE_DISTANCE = "com.example.routeplanner.ROUTE_DISTANCE";
+
 
     private final LatLng defaultLocation = new LatLng(55.7858105, 12.5195605);
     private static final int DEFAULT_ZOOM = 15;
@@ -50,6 +52,9 @@ public class RunRouteActivity extends FragmentActivity
     private boolean isCyclic;
     private boolean locationPermissionGranted;
 
+    public float distance;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,10 +66,14 @@ public class RunRouteActivity extends FragmentActivity
             if(extras != null) {
                 positions = extras.getString(EXTRA_MESSAGE_ROUTE_POSITIONS);
                 isCyclic = extras.getBoolean(EXTRA_MESSAGE_ROUTE_IS_CYCLIC);
+                distance=extras.getFloat(EXTRA_MESSAGE_ROUTE_DISTANCE);
+
             }
         } else {
             positions = (String) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_POSITIONS);
             isCyclic = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_IS_CYCLIC);
+            distance = (float) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_DISTANCE);
+
         }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
