@@ -12,6 +12,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 public class PersonalStatisticsActivity extends AppCompatActivity {
 
@@ -48,18 +53,21 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
 
                      //Getting info to stats
                      totalTime=dataSnapshot.getValue(PersonalStats.class).getTime();
-                     avgSpeed =Calspeed(dataSnapshot.getValue(PersonalStats.class).getNum(),dataSnapshot.getValue(PersonalStats.class).getTotalspeed());
+                     avgSpeed=dataSnapshot.getValue(PersonalStats.class).getTotalspeed()/dataSnapshot.getValue(PersonalStats.class).getNum();
                      totalDistance=dataSnapshot.getValue(PersonalStats.class).getTotaldistance();
 
-                     totalTime = Math.round(totalTime*100) / 100;
-                     avgSpeed = Math.round(avgSpeed*100.0) / 100.0;
-                     totalDistance = Math.round(totalDistance*100.0) / 100.0;
+                     //formating statistics
+                     DecimalFormat df = new DecimalFormat("#.00");
 
-                     //Calculating statistics
                      //Viewing staticstics
-                     display_time.setText("Total Time:\n"+totalTime + " minutes");
-                     display_distance.setText("Total distance:\n"+totalDistance + " km");
-                     display_avgSpeed.setText("Average speed:\n"+ avgSpeed + " km/h");
+                     if (totalTime<60){
+                         display_time.setText("Total Time:\n"+totalTime+" s");
+                     }
+                     else {
+                         display_time.setText("Total Time:\n"+totalTime/60+" min");
+                     }
+                     display_distance.setText("Total distance:\n"+df.format(totalDistance)+" km");
+                     display_avgSpeed.setText("Average speed:\n"+df.format(avgSpeed)+" km/h");
                  }
 
                  @Override
@@ -69,10 +77,6 @@ public class PersonalStatisticsActivity extends AppCompatActivity {
              });
     }
 
-
-    private double Calspeed(int num, double total )  {
-            return (total / (double) num);
-    }
 }
 
 
