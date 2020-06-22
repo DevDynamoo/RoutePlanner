@@ -80,7 +80,7 @@ public class RunClockFragment extends Fragment {
             public void onClick(View view) {
                 AlertDialog dialog = new AlertDialog.Builder(parentActivity)
                         .setMessage("Are you sure you want to finish?")
-                        .setTitle("Dialog title")
+                        .setTitle("Finish route")
                         .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
