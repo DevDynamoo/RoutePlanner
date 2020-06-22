@@ -19,4 +19,6 @@
     <string name="totaltime">TotalTime</string>
     <string name="button_choose_route">Choose a route</string>
     <string name="button_run_route">Run route</string>
+    <string name="textView_route_name">No route selected</string>
+    <string name="textView_route_distance">Please select a route</string>
 </resources>

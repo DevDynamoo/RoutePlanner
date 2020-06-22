@@ -17,6 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 public class RouteOverviewActivity extends AppCompatActivity {
@@ -65,7 +66,6 @@ public class RouteOverviewActivity extends AppCompatActivity {
 
                 }
                 ListView listView = (ListView) findViewById(R.id.listView);
-
                 RouteListAdapter adapter = new RouteListAdapter
                         (RouteOverviewActivity.this, R.layout.route_overview_listadapter, routeListItems);
                 listView.setAdapter(adapter);
@@ -73,10 +73,14 @@ public class RouteOverviewActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                         if (startedForResult) {
-                            Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
-                            returnIntent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, arg1);
-                            setResult(RESULT_OK, returnIntent);
                             Log.d(TAG, "Item clicked");
+                            Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
+                            returnIntent.putExtra("name", ((RouteListItem) arg0.getItemAtPosition(position)).getName());
+                            returnIntent.putExtra("distance", ((RouteListItem) arg0.getItemAtPosition(position)).getDistance());
+                            returnIntent.putExtra("positions", ((RouteListItem) arg0.getItemAtPosition(position)).getPostions());
+                            returnIntent.putExtra("cyclic", ((RouteListItem) arg0.getItemAtPosition(position)).isCyclic());
+                            setResult(RESULT_OK, returnIntent);
+                            finish();
                         } else {
                             Log.d(TAG, "Item not clicked");
                         }

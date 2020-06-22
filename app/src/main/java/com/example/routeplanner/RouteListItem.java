@@ -2,9 +2,10 @@ package com.example.routeplanner;
 
 import com.google.android.gms.maps.model.Marker;
 
+import java.io.Serializable;
 import java.util.Stack;
 
-public class RouteListItem {
+public class RouteListItem implements Serializable {
 
     private String name;
     private float distance;
