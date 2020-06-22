@@ -108,10 +108,15 @@ public class CreateRouteInteractFragment extends Fragment {
                 member.setName(name);
                 ref.push().setValue(member);
 
-                Toast.makeText(parentActivity, "Route created", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(parentActivity, MainActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(intent);
+
+                if (!(markerStack.size() <= 1)) {
+                    Toast.makeText(parentActivity, "Route created", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(parentActivity, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(parentActivity, "Route must have at least 2 markers", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
