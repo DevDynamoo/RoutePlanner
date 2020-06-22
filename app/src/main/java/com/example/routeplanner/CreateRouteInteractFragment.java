@@ -70,6 +70,18 @@ public class CreateRouteInteractFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 //TODO Implement code that generates a new route and stores it
+                String name = parentActivity.getRouteName();
+
+                int distance = 0;
+                ArrayList<Float> routeLength = parentActivity.getRouteLength();
+                for (int index = 0; index < routeLength.size(); index++){
+                    distance += routeLength.get(index);
+                }
+
+                Stack<Marker> markerStack = parentActivity.getMarkerStack();
+
+                boolean isCyclic = parentActivity.getCycleCheckBox().isChecked();
+
 
             }
         });

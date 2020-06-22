@@ -411,4 +411,8 @@ public class CreateRouteActivity extends FragmentActivity
     public CheckBox getCycleCheckBox() {
         return cycleCheckBox;
     }
+
+    public String getRouteName() {
+       return ((CreateRouteTitleFragment) getFragmentManager().findFragmentById(R.id.route_title_fragment)).getRouteName();
+    }
 }
