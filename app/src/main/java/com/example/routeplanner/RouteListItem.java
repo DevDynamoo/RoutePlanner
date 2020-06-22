@@ -14,17 +14,19 @@ public class RouteListItem {
     private String avgSpeed;
 
     private Stack<Marker> markerStack = new Stack<Marker>();
-    private Stack<Polyline> polylineStack = new Stack<Polyline>();
-    private Polyline cycleLine;
+    private boolean isCyclic;
 
-    public RouteListItem(String name, String distance, String completions, String avgSpeed) {
+    public RouteListItem(String name, String distance, Stack<Marker> markerStack, boolean isCyclic) {
         this.name = name;
         this.distance = distance;
-        this.completions = completions;
-        this.avgSpeed = avgSpeed;
+        this.markerStack = markerStack;
+        this.isCyclic = isCyclic;
+        avgSpeed = "Route not run yet";
     }
 
-    public RouteListItem() { }
+    public RouteListItem() {
+        avgSpeed = "Route not run yet";
+    }
 
     public int getId() {
         return id;
@@ -74,19 +76,11 @@ public class RouteListItem {
         this.markerStack = markerStack;
     }
 
-    public Stack<Polyline> getPolylineStack() {
-        return polylineStack;
+    public boolean isCyclic() {
+        return isCyclic;
     }
 
-    public void setPolylineStack(Stack<Polyline> polylineStack) {
-        this.polylineStack = polylineStack;
-    }
-
-    public Polyline getCycleLine() {
-        return cycleLine;
-    }
-
-    public void setCycleLine(Polyline cycleLine) {
-        this.cycleLine = cycleLine;
+    public void setCyclic(boolean cyclic) {
+        isCyclic = cyclic;
     }
 }
