@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -38,14 +39,14 @@ public class RouteOverviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.route_overview_activity);
 
-        if (savedInstanceState == null) {
-            Bundle extras = getIntent().getExtras();
-            if(extras != null) {
-                startedForResult = extras.getBoolean(EXTRA_MESSAGE_ROUTE_OVERVIEW);
-            }
-        } else {
-            startedForResult = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_OVERVIEW);
-        }
+//        if (savedInstanceState == null) {
+//            Bundle extras = getIntent().getExtras();
+//            if(extras != null) {
+//                startedForResult = extras.getBoolean(EXTRA_MESSAGE_ROUTE_OVERVIEW);
+//            }
+//        } else {
+//            startedForResult = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_OVERVIEW);
+//        }
         listView = (ListView) findViewById(R.id.listView);
 
         adapter = new RouteListAdapter
@@ -55,22 +56,26 @@ public class RouteOverviewActivity extends AppCompatActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
-                if (startedForResult) {
-                    Log.d(TAG, "Item clicked");
-                    Intent returnIntent = new Intent(RouteOverviewActivity.this, PrepareRunActivity.class);
-                    returnIntent.putExtra("name", ((RouteListItem) arg0.getItemAtPosition(position)).getName());
-                    returnIntent.putExtra("distance", ((RouteListItem) arg0.getItemAtPosition(position)).getDistance());
-                    returnIntent.putExtra("positions", ((RouteListItem) arg0.getItemAtPosition(position)).getPositions());
-                    returnIntent.putExtra("cyclic", ((RouteListItem) arg0.getItemAtPosition(position)).isCyclic());
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                } else {
-                    Log.d(TAG, "Item not clicked");
-                }
+            if (getCallingActivity() != null) {
+
+                Log.d(TAG, "Item clicked");
+
+                Intent returnIntent = new Intent(Intent.ACTION_SEND);
+
+                RouteListItem item = (RouteListItem) arg0.getItemAtPosition(position);
+
+                returnIntent.putExtra("name", item.getName());
+                returnIntent.putExtra("distance", item.getDistance());
+                returnIntent.putExtra("positions", item.getPositions());
+                returnIntent.putExtra("cyclic", item.isCyclic());
+
+                setResult(RESULT_OK, returnIntent);
+                finish();
+            } else {
+                Log.d(TAG, "Item not clicked");
+            }
             }
         });
-
-        Log.i(TAG, "onCreate called");
 
         // appDatabase = FirebaseDatabase.getInstance();
         // DatabaseReference ref = appDatabase.getReference("Routes");

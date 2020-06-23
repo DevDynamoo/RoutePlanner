@@ -53,17 +53,16 @@ public class PrepareRunActivity extends AppCompatActivity {
         runRouteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (routeSelected) {
-                    Intent intent = new Intent(PrepareRunActivity.this, RunRouteActivity.class);
-                    intent
-                            .putExtra(EXTRA_MESSAGE_ROUTE_POSITIONS,routePositions)
-                            .putExtra(EXTRA_MESSAGE_ROUTE_IS_CYCLIC,routeIsCyclic)
-                            .putExtra(EXTRA_MESSAGE_ROUTE_DISTANCE,routeDistance);
-                    startActivityForResult(intent, START_ROUTE_RUN_REQUEST_CODE);
-                } else {
-                    Toast.makeText(PrepareRunActivity.this, "Please select a route first", Toast.LENGTH_SHORT).show();
-                }
-
+            if (routeSelected) {
+                Intent intent = new Intent(PrepareRunActivity.this, RunRouteActivity.class);
+                intent
+                        .putExtra(EXTRA_MESSAGE_ROUTE_POSITIONS,routePositions)
+                        .putExtra(EXTRA_MESSAGE_ROUTE_IS_CYCLIC,routeIsCyclic)
+                        .putExtra(EXTRA_MESSAGE_ROUTE_DISTANCE,routeDistance);
+                startActivityForResult(intent, START_ROUTE_RUN_REQUEST_CODE);
+            } else {
+                Toast.makeText(PrepareRunActivity.this, "Please select a route first", Toast.LENGTH_SHORT).show();
+            }
             }
         });
 
@@ -74,33 +73,35 @@ public class PrepareRunActivity extends AppCompatActivity {
                 Intent intent = new Intent(PrepareRunActivity.this, RouteOverviewActivity.class);
                 intent.putExtra(EXTRA_MESSAGE_ROUTE_OVERVIEW, true);
                 startActivityForResult(intent, GET_LIST_ITEM_REQUEST_CODE);
-
             }
         });
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode,resultCode,data);
+
         Log.d("GetListItemTest", "Entered onActivityResult()");
+
         if(resultCode == Activity.RESULT_OK &&
             requestCode == GET_LIST_ITEM_REQUEST_CODE) {
+
             Log.d("GetListItemTest", "Name and distance: " + data.getStringExtra("name") + " " +  data.getStringExtra("distance"));
+
             routeSelected = true;
 
-            tvRouteName.setText(routeName = data.getStringExtra("name"));
+            routeName = data.getStringExtra("name");
+            routePositions = data.getStringExtra("positions");
+            routeIsCyclic = data.getBooleanExtra("cyclic", false);
+            routeDistance = data.getFloatExtra("distance",-1f);
 
-            routeDistance = data.getFloatExtra("distance",-1);
-            float num = (float) Math.round(routeDistance*100)/100;
-            if (num < 0) {
+            tvRouteName.setText(routeName);
+
+            if (routeDistance < 0f) {
                 tvRouteDistance.setText("Distance not available");
             } else {
-                tvRouteDistance.setText(num + " km");
+                tvRouteDistance.setText(routeDistance + " km");
             }
-
-            routePositions = data.getStringExtra("positions");
-
-            routeIsCyclic = data.getBooleanExtra("cyclic", false);
-
         } else if (resultCode == Activity.RESULT_OK &&
                 requestCode == START_ROUTE_RUN_REQUEST_CODE) {
 

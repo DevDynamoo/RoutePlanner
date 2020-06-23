@@ -54,8 +54,6 @@ public class RunRouteActivity extends FragmentActivity
 
     public float distance;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,14 +64,12 @@ public class RunRouteActivity extends FragmentActivity
             if(extras != null) {
                 positions = extras.getString(EXTRA_MESSAGE_ROUTE_POSITIONS);
                 isCyclic = extras.getBoolean(EXTRA_MESSAGE_ROUTE_IS_CYCLIC);
-                distance=extras.getFloat(EXTRA_MESSAGE_ROUTE_DISTANCE);
-
+                distance = extras.getFloat(EXTRA_MESSAGE_ROUTE_DISTANCE);
             }
         } else {
             positions = (String) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_POSITIONS);
             isCyclic = (boolean) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_IS_CYCLIC);
             distance = (float) savedInstanceState.getSerializable(EXTRA_MESSAGE_ROUTE_DISTANCE);
-
         }
         mFusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
@@ -89,24 +85,24 @@ public class RunRouteActivity extends FragmentActivity
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.map = googleMap;
-        getLocationPermission();
-        generateMarkers();
-        // Turn on the My Location layer and the related control on the map.
-        updateLocationUI();
 
-        // Get the current location of the device and set the position of the map.
+        // Location setup
+        getLocationPermission();
+        updateLocationUI();
         getDeviceLocation();
+
+        // Generates the selected route's markers
+        generateMarkers();
     }
 
     private void generateMarkers() {
-        Log.d(TAG, "Whole positions: " + positions);
-
         String[] coordinateArray = positions.split(";");
 
         for (String s : coordinateArray) {
             Log.d(TAG, "Coordinate: " + s);
         }
         Stack<Marker> markerStack = new Stack<>();
+
         for (int index = 0; index < coordinateArray.length; index ++) {
             MarkerOptions newMarkerOptions = new MarkerOptions()
                     .position(new LatLng(

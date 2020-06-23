@@ -91,6 +91,7 @@ public class CreateRouteInteractFragment extends Fragment {
                 name = parentActivity.getRouteName();
                 distance = parentActivity.updateCalcLengthText();
                 isCyclic = parentActivity.getCycleCheckBox().isChecked();
+                pos="";
 
                 // Retrieve markers, and concatenate a string containing all positions
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
@@ -166,7 +167,6 @@ public class CreateRouteInteractFragment extends Fragment {
                 }
             }
         });
-
     }
 
     private void removeDistance() {
