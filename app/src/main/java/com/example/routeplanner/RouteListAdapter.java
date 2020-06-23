@@ -39,7 +39,7 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
         TextView tvTitle = (TextView) convertView.findViewById(R.id.RouteMainTitle);
         TextView tvDistance = (TextView) convertView.findViewById(R.id.RouteDistance);
-        TextView tvCyclic = (TextView) convertView.findViewById(R.id.RouteCompletions);
+        TextView tvCyclic = (TextView) convertView.findViewById(R.id.IsCyclic);
 
         tvTitle.setText(name);
         tvDistance.setText("Distance: " + distance);
