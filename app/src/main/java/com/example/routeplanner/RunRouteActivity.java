@@ -18,11 +18,13 @@ import android.widget.Chronometer;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
@@ -89,19 +91,21 @@ public class RunRouteActivity extends FragmentActivity
         // Location setup
         getLocationPermission();
         updateLocationUI();
-        getDeviceLocation();
 
         // Generates the selected route's markers
         generateMarkers();
+
     }
 
     private void generateMarkers() {
         String[] coordinateArray = positions.split(";");
 
+
         for (String s : coordinateArray) {
             Log.d(TAG, "Coordinate: " + s);
         }
         Stack<Marker> markerStack = new Stack<>();
+        LatLngBounds.Builder bulider = new LatLngBounds.Builder();
 
         for (int index = 0; index < coordinateArray.length; index ++) {
             MarkerOptions newMarkerOptions = new MarkerOptions()
@@ -110,6 +114,12 @@ public class RunRouteActivity extends FragmentActivity
                             Double.parseDouble(coordinateArray[index].split(",")[1]) ))
                     .draggable(false);
             Marker newMarker = map.addMarker(newMarkerOptions);
+
+            //Calculating the markers to get their position and zoom
+            bulider.include(newMarker.getPosition());
+            LatLngBounds bounds = bulider.build();
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, DEFAULT_ZOOM);
+            map.animateCamera(cu);
 
             // Creates a line between the given points
             if (!markerStack.isEmpty()) {
