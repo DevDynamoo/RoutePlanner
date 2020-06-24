@@ -1,10 +1,10 @@
 package com.example.routeplanner;
 
 public class PersonalStats {
-        public float totalspeed;
-        public int num;
-        public float totaldistance;
-        public int time;
+        private float totalspeed;
+        private int num;
+        private float totaldistance;
+        private int time;
 
     public float getTotalspeed() {
         return totalspeed;
