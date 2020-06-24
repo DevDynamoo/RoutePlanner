@@ -142,15 +142,10 @@ public class RunClockFragment extends Fragment {
                                         HashMap hashMap = new HashMap();
 
                                         hashMap.put("num",num);
-                                        refps.child(ID).updateChildren(hashMap);
-
                                         hashMap.put("time",totalTime);
-                                        refps.child(ID).updateChildren(hashMap);
-
                                         hashMap.put("totaldistance",totalDistance);
-                                        refps.child(ID).updateChildren(hashMap);
-
                                         hashMap.put("totalspeed",totalAvrSpeed);
+
                                         refps.child(ID).updateChildren(hashMap);
 
                                     }

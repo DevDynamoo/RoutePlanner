@@ -101,7 +101,7 @@ public class CreateRouteInteractFragment extends Fragment {
                         pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
                     }
                     // Save new route to database
-                    RouteListItem member = new RouteListItem(name, distance, pos, isCyclic);
+                    member = new RouteListItem(name, distance, pos, isCyclic);
                     ref.push().setValue(member);
 
                     // Return flow to main menu
