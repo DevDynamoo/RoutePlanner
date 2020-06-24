@@ -6,6 +6,13 @@ public class PersonalStats {
         private float totaldistance;
         private int time;
 
+    public PersonalStats(float totalspeed, int num, float totaldistance, int time) {
+        this.totalspeed = totalspeed;
+        this.num = num;
+        this.totaldistance = totaldistance;
+        this.time = time;
+    }
+
     public float getTotalspeed() {
         return totalspeed;
     }
