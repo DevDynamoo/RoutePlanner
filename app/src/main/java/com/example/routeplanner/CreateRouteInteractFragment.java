@@ -91,14 +91,15 @@ public class CreateRouteInteractFragment extends Fragment {
 
                 // Retrieve markers, and concatenate a string containing all positions
                 Stack<Marker> markerStack = parentActivity.getMarkerStack();
-                for (Marker m: markerStack) {
-                    pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
-                }
+
 
                 // Check whether or not at least 2 markers have been set
                 if (!(markerStack.size() <= 1)) {
                     Toast.makeText(parentActivity, "Route created", Toast.LENGTH_SHORT).show();
-
+                    //Save to postions
+                    for (Marker m: markerStack) {
+                        pos=pos+m.getPosition().latitude+","+m.getPosition().longitude+";";
+                    }
                     // Save new route to database
                     RouteListItem member = new RouteListItem(name, distance, pos, isCyclic);
                     ref.push().setValue(member);
