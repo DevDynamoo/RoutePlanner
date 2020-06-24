@@ -5,7 +5,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,6 @@ public class RunClockFragment extends Fragment {
 
     private boolean timeStarted = false;
     private long currentTimePassed;
-    private long finishTime;
 
 
     //Total stats
@@ -47,8 +45,6 @@ public class RunClockFragment extends Fragment {
 
 
     DatabaseReference refps;
-
-    PersonalStats personalStats;
 
     String ID;
 

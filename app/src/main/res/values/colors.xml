@@ -7,10 +7,6 @@
     <color name="colorBackgroundRed">#FFDBCA</color>
     <color name="backgroundTintRed">#83F88D5D</color>
 
-    <color name="colorPrimaryGreen">#50CF55</color>
-    <color name="colorPrimaryDarkGreen">#00965A</color>
-    <color name="colorAccentGreen">#9F69FF</color>'
-    <color name="colorBackgroundGreen">#E1EFD5</color>
-    <color name="backgroundTintGreen">#835DF860</color>
+    '
 
 </resources>

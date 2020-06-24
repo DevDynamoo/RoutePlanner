@@ -8,12 +8,5 @@
         <item name="android:colorBackground">@color/colorBackgroundRed</item>
         <item name="backgroundTint">@color/backgroundTintRed</item>
     </style>
-    <style name="GreenTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <item name="colorPrimary">@color/colorPrimaryGreen</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDarkGreen</item>
-        <item name="colorAccent">@color/colorAccentGreen</item>
-        <item name="android:colorBackground">@color/colorBackgroundGreen</item>
-        <item name="backgroundTint">@color/backgroundTintGreen</item>
-    </style>
 
 </resources>

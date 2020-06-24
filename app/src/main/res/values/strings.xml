@@ -2,7 +2,6 @@
     <string name="app_name">RoutePlanner</string>
     <string name="RouteMainTitle"> <u>Main Title</u> </string>
     <string name="RouteDistance"> Distance:  </string>
-    <string name="AverageSpeed"> Average speed: </string>
     <string name="button_goto_run_route_text">Run a route</string>
     <string name="button_goto_create_route_text">Create a new route</string>
     <string name="button_goto_route_overview_text">See your routes</string>
@@ -13,9 +12,6 @@
     <string name="name_your_route">Name your route:</string>
     <string name="title_activity_maps">Map</string>
     <string name="google_maps_key">AIzaSyDvEnjyFXXOywEWQtggkoeGq8wQZwYAFYs</string>
-    <string name="totaldistance">TotalDistance</string>
-    <string name="overall_average_speed">Overall Average Speed</string>
-    <string name="totaltime">TotalTime</string>
     <string name="button_choose_route">Choose a route</string>
     <string name="button_run_route">Run route</string>
     <string name="textView_route_name">No route selected</string>

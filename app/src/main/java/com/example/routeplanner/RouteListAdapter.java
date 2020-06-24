@@ -7,12 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import com.google.android.gms.maps.model.Marker;
-
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.Stack;
 
 public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
@@ -30,7 +25,6 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
         float distance = getItem(position).getDistance();
         boolean cyclic = getItem(position).isCyclic();
 
-        //RouteListItem item = new RouteListItem(name, distance, completions, avgSpeed);
         LayoutInflater inflater = LayoutInflater.from(mContext);
 
         if (convertView == null) {
@@ -43,7 +37,7 @@ public class RouteListAdapter extends ArrayAdapter<RouteListItem> {
 
         tvTitle.setText(name);
         tvDistance.setText("Distance: " + distance);
-        tvCyclic.setText("Cyclic? : " + getItem(position).isCyclic());
+        tvCyclic.setText("Cyclic? : " + cyclic);
 
         return convertView;
     }
