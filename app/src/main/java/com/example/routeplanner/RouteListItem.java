@@ -14,6 +14,8 @@ public class RouteListItem {
         this.cyclic = cyclic;
     }
 
+    public RouteListItem() {}
+
     public String getName() {
         return name;
     }
@@ -28,5 +30,21 @@ public class RouteListItem {
 
     public boolean isCyclic() {
         return cyclic;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
+    public void setPositions(String positions) {
+        this.positions = positions;
+    }
+
+    public void setCyclic(boolean cyclic) {
+        this.cyclic = cyclic;
     }
 }

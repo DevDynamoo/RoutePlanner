@@ -13,6 +13,8 @@ public class PersonalStats {
         this.time = time;
     }
 
+    public PersonalStats(){}
+
     public float getTotalspeed() {
         return totalspeed;
     }
